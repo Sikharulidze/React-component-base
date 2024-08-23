@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import Header from "./components/shared/Header";
-import { Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import SvgComponents from "./pages/SvgComponents";
+import SvgDetail from "./pages/SvgDetail";
 
 function App() {
   return (
     <Main>
       <Header />
-      <Routes></Routes>
+      <Routes>
+        <Route path="/" element={<Navigate to="/svg" replace={true} />} />
+        <Route path="/svg" element={<SvgComponents />} />
+        <Route path="/svg/:id" element={<SvgDetail />} />
+      </Routes>
     </Main>
   );
 }
