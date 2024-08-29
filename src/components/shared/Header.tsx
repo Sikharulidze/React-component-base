@@ -4,104 +4,51 @@ import logo from "../../assets/images/logo.webp";
 import { useState, useEffect } from "react";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 600) {
-        setIsDesktop(true);
-      } else {
-        setIsDesktop(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
-    <HeaderElement>
-      <Link to="/">
-        <ImageWrapper>
-          <StyledImage src={logo} alt="" />
-        </ImageWrapper>
-      </Link>
-      {isDesktop || isOpen ? (
+    <>
+      <DesktopHeader>
+        {/* <HeaderElement> */}
+        <Link to="/">
+          <ImageWrapper>
+            <StyledImage src={logo} alt="" />
+          </ImageWrapper>
+        </Link>
         <nav>
           <StyledNavLink to="/">Home</StyledNavLink>
           <StyledNavLink to="/svg">SVG Components</StyledNavLink>
         </nav>
-      ) : null}
-      <Container className={isOpen ? "open" : ""} onClick={handleClick}>
-        <div className="bar1"></div>
-        <div className="bar2"></div>
-        <div className="bar3"></div>
-      </Container>
-    </HeaderElement>
+        {/* </HeaderElement> */}
+      </DesktopHeader>
+      <MobileHeader>
+        {/* <HeaderElement> */}
+        <Link to="/">
+          <ImageWrapper>
+            <StyledImage src={logo} alt="" />
+          </ImageWrapper>
+        </Link>
+        {isOpen ? (
+          <nav>
+            <StyledNavLink to="/">Home</StyledNavLink>
+            <StyledNavLink to="/svg">SVG Components</StyledNavLink>
+          </nav>
+        ) : null}
+        <Container className={isOpen ? "open" : ""} onClick={handleClick}>
+          <div className="bar1"></div>
+          <div className="bar2"></div>
+          <div className="bar3"></div>
+        </Container>
+        {/* </HeaderElement> */}
+      </MobileHeader>
+    </>
   );
 };
 
 export default Header;
 
-const HeaderElement = styled.header`
-  color: black;
-  padding: 8px 50px 8px 80px;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  @media (max-width: 600px) {
-    padding: 8px 10px;
-    nav {
-      display: flex;
-      flex-direction: column;
-      background-color: white;
-      position: absolute;
-      top: 80px;
-      right: 0;
-      left: 0;
-      transition: opacity 0.3s;
-      opacity: 0;
-      transform: translateY(-100%);
-      transition: transform 0.5s, opacity 0.3s;
-      animation: appear 0.5s forwards;
-    }
-    &.open nav {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    nav a {
-      border-bottom: 1px solid #2765d8;
-      text-align: right;
-      padding: 8px 0px;
-      width: 90%;
-      margin: auto;
-      z-index: 10;
-      font-size: 20px;
-    }
-    nav a:hover:after {
-      width: 0;
-    }
-    @keyframes appear {
-      0% {
-        opacity: 0;
-        transform: translateY(-100%);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  }
-`;
-
 const Container = styled.div`
-  display: none;
-
-  @media (max-width: 600px) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -216,4 +163,67 @@ const StyledImage = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 50%;
+`;
+const DesktopHeader = styled.header`
+  color: black;
+  padding: 8px 50px 8px 80px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 600px) {
+    display: none;
+  }
+`;
+const MobileHeader = styled.header`
+  color: black;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  @media screen and (min-width: 601px) {
+    display: none;
+  }
+    nav {
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      position: absolute;
+      top: 80px;
+      right: 0;
+      left: 0;
+      transition: opacity 0.3s;
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: transform 0.5s, opacity 0.3s;
+      animation: appear 0.5s forwards;
+    }
+    &.open nav {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    nav a {
+      border-bottom: 1px solid #2765d8;
+      text-align: right;
+      padding: 8px 0px;
+      width: 90%;
+      margin: auto;
+      z-index: 10;
+      font-size: 20px;
+    }
+    nav a:hover:after {
+      width: 0;
+    }
+    @keyframes appear {
+      0% {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
 `;
