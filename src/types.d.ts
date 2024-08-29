@@ -1,8 +1,17 @@
+export type ComponentPropsType = {
+  name: string;
+  require: boolean;
+  description: string;
+};
+
 export type SvgComponentType = {
   name: string;
+  description: string;
   image: string;
-  default: string;
+  base: string;
+  props: ComponentPropsType[];
   "js-snippet": string;
   "ts-snippet": string;
-  collection?: string;
+  id: string;
+  collectionName?: string;
 };
