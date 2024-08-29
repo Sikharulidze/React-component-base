@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/images/logo.webp";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
@@ -10,7 +10,6 @@ const Header = () => {
   return (
     <>
       <DesktopHeader>
-        {/* <HeaderElement> */}
         <Link to="/">
           <ImageWrapper>
             <StyledImage src={logo} alt="" />
@@ -20,10 +19,8 @@ const Header = () => {
           <StyledNavLink to="/">Home</StyledNavLink>
           <StyledNavLink to="/svg">SVG Components</StyledNavLink>
         </nav>
-        {/* </HeaderElement> */}
       </DesktopHeader>
       <MobileHeader>
-        {/* <HeaderElement> */}
         <Link to="/">
           <ImageWrapper>
             <StyledImage src={logo} alt="" />
@@ -40,7 +37,6 @@ const Header = () => {
           <div className="bar2"></div>
           <div className="bar3"></div>
         </Container>
-        {/* </HeaderElement> */}
       </MobileHeader>
     </>
   );
@@ -61,10 +57,10 @@ const Container = styled.div`
 
   .bar1,
   .bar2,
-  .bar3 {
+  .bar3{
     width: 100%;
     height: 4px;
-    background: black;
+    background: #000;
     margin-bottom: 5px;
     transition: transform 0.3s;
   }
@@ -165,7 +161,6 @@ const StyledImage = styled.img`
   border-radius: 50%;
 `;
 const DesktopHeader = styled.header`
-  color: black;
   padding: 8px 50px 8px 80px;
   text-align: center;
   display: flex;
@@ -176,7 +171,6 @@ const DesktopHeader = styled.header`
   }
 `;
 const MobileHeader = styled.header`
-  color: black;
   text-align: center;
   display: flex;
   justify-content: space-between;
@@ -188,7 +182,7 @@ const MobileHeader = styled.header`
     nav {
       display: flex;
       flex-direction: column;
-      background-color: white;
+      background-color: #fff;
       position: absolute;
       top: 80px;
       right: 0;
