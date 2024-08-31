@@ -1,34 +1,43 @@
 import { useEffect } from "react";
 import useSvgComponents from "../store/useSvgComponents";
-
 // import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchSvgComponents();
   }, []);
-
+  const handleSvgClick = (id: string) => {
+    navigate(`/svg/${id}`);
+  };
   return (
     <Main>
       <DisplayBox>
         {components.map((component) => (
-          <ImageBox key={component.id}>
+          <ImageBox
+            key={component.id}
+            onClick={() => handleSvgClick(component.id)}
+          >
             <ImageElement
               src={import.meta.env.VITE_API_URL + component.image}
             />
           </ImageBox>
         ))}
       </DisplayBox>
-      {/* <SnippetBox>
+      {/* <div style={{width: "500px"}}>
         {components.length > 0 && (
           <SyntaxHighlighter language="typescript" style={atomDark}>
-            {components[0].base}
+            {components[0]["js-snippet"]}
           </SyntaxHighlighter>
         )}
-      </SnippetBox> */}
+      </div> */}
     </Main>
   );
 };
