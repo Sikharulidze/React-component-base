@@ -39,6 +39,7 @@ const SvgDetail = () => {
                 />
               </DetailImage>
               <p className="description">{currentSvg.description}</p>
+              <h3>Component Props</h3>
               <ul>
                 <Li>
                   <span>{currentSvg?.props[0].name}: </span>
@@ -115,6 +116,13 @@ const DetailSection = styled.div`
   p.description {
     margin-bottom: 30px;
   }
+  h3 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 30px;
+    color: #2765d8;
+    font-weight: 400;
+  }
   @media (max-width: 830px) {
     flex-direction: column;
     gap: 30px;
@@ -187,13 +195,13 @@ const ButtonContainer = styled.div`
 const Li = styled.li`
   width: 100%;
   display: flex;
-  border: 1px solid #2765d8;
-  padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
   align-items: center;
-  justify-content: space-between;
+  font-size: 18px;
+  gap: 10px;
   span:nth-child(1) {
-    font-size: 22px;
+    font-size: 26px;
+    font-weight: 900;
   }
 `;
