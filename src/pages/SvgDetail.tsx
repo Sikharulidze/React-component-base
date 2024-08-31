@@ -3,21 +3,27 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-const fetchSvgData = async (id: string) => {
-  try {
-    const response = await axios.get(`https://your-api.com/svg/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+import useSvgComponents from "../store/useSvgComponents";
+
 const SvgDetail = () => {
   const { id } = useParams();
+  const { components } = useSvgComponents();
+  const currentComponent = components.find((component) => component.id === id);
 
   return (
     <>
-      <h1>{id}</h1>
+      <div>
+        {currentComponent && (
+          <div>
+            <h1>{currentComponent.name}</h1>
+            <img
+              src={import.meta.env.VITE_API_URL + currentComponent.image}
+              alt={currentComponent.name}
+            />
+            <p>{currentComponent.description}</p>
+          </div>
+        )}
+      </div>
     </>
   );
 };
