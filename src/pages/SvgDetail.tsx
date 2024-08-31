@@ -1,26 +1,33 @@
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import useSvgComponents from "../store/useSvgComponents";
-
+import { useState, useEffect } from "react";
 const SvgDetail = () => {
   const { id } = useParams();
   const { components } = useSvgComponents();
-  const currentComponent = components.find((component) => component.id === id);
-
+  const navigate = useNavigate();
+  if (!components) {
+    return <div>Loading...</div>;
+  }
+  const currentSvg = components.find((component) => component.id === id);
+  console.log(currentSvg);
+  useEffect(() => {
+    if (currentSvg === undefined) {
+      navigate("/svg");
+    }
+  }, );
   return (
     <>
       <div>
-        {currentComponent && (
+        {currentSvg && (
           <div>
-            <h1>{currentComponent.name}</h1>
+            <h1>{currentSvg.name}</h1>
             <img
-              src={import.meta.env.VITE_API_URL + currentComponent.image}
-              alt={currentComponent.name}
+              src={import.meta.env.VITE_API_URL + currentSvg.image}
+              alt={currentSvg.name}
             />
-            <p>{currentComponent.description}</p>
+            <p>{currentSvg.description}</p>
           </div>
         )}
       </div>
