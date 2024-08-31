@@ -145,7 +145,7 @@ const SvgSource = styled.div`
     margin: auto;
   }
 `;
-const ButtonContainer = styled.button`
+const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
   margin: auto;
