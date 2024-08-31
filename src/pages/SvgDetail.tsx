@@ -119,7 +119,7 @@ const DetailSection = styled.div`
   h3 {
     margin-bottom: 20px;
     text-align: center;
-    font-size: 30px;
+    font-size: 26px;
     color: #2765d8;
     font-weight: 400;
   }
