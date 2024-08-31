@@ -8,7 +8,7 @@ const SvgDetail = () => {
   const { id } = useParams();
   const { components } = useSvgComponents();
   const navigate = useNavigate();
-  const [language, setLanguage] = useState("js");
+  const [language, setLanguage] = useState("default");
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
   };
@@ -42,11 +42,24 @@ const SvgDetail = () => {
         </DetailContainer>
         <SvgSource>
           <ButtonContainer>
-            <button onClick={() => handleLanguageChange("default")}>
+            <button
+              className={language === "default" ? "active" : ""}
+              onClick={() => handleLanguageChange("default")}
+            >
               Default
             </button>
-            <button onClick={() => handleLanguageChange("js")}>JS</button>
-            <button onClick={() => handleLanguageChange("ts")}>TS</button>
+            <button
+              className={language === "js" ? "active" : ""}
+              onClick={() => handleLanguageChange("js")}
+            >
+              JS
+            </button>
+            <button
+              className={language === "ts" ? "active" : ""}
+              onClick={() => handleLanguageChange("ts")}
+            >
+              TS
+            </button>
           </ButtonContainer>
           {components.length > 0 && (
             // <SyntaxHighlighter language="typescript" style={atomDark}>
@@ -148,6 +161,10 @@ const ButtonContainer = styled.button`
     &:hover {
       background-color: #3498db;
       border-color: #3498db;
+    }
+    &.active {
+      background-color: #3498db;
+      color: #fff;
     }
   }
 `;
