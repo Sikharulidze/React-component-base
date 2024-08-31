@@ -16,12 +16,13 @@ const SvgDetail = () => {
     if (currentSvg === undefined) {
       navigate("/svg");
     }
-  }, );
+  }, [currentSvg]);
   return (
     <>
       <div>
         {currentSvg && (
           <div>
+            <h1>{id}</h1>
             <h1>{currentSvg.name}</h1>
             <img
               src={import.meta.env.VITE_API_URL + currentSvg.image}
@@ -30,6 +31,13 @@ const SvgDetail = () => {
             <p>{currentSvg.description}</p>
           </div>
         )}
+        <div style={{ width: "500px" }}>
+          {components.length > 0 && (
+            <SyntaxHighlighter language="typescript" style={atomDark}>
+              {components[0]["js-snippet"]}
+            </SyntaxHighlighter>
+          )}
+        </div>
       </div>
     </>
   );
