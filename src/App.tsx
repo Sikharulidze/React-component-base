@@ -5,6 +5,7 @@ import SvgComponents from "./pages/SvgComponents";
 import SvgDetail from "./pages/SvgDetail";
 
 function App() {
+  console.log(import.meta.env.VITE_API_URL);
   return (
     <Main>
       <Header />
