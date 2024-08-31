@@ -22,6 +22,8 @@ const SvgDetail = () => {
       navigate("/svg");
     }
   }, [currentSvg]);
+  // const color = currentSvg?.props[1].description;
+  // const size = currentSvg?.props[0].
   return (
     <>
       <DetailSection>
@@ -36,7 +38,21 @@ const SvgDetail = () => {
                   alt={currentSvg.name}
                 />
               </DetailImage>
-              <p>{currentSvg.description}</p>
+              <p className="description">{currentSvg.description}</p>
+              <ul>
+                <Li>
+                  <span>{currentSvg?.props[0].name}: </span>
+                  <span>{currentSvg?.props[0].description}</span>
+                </Li>
+                <Li>
+                  <span>{currentSvg?.props[1].name}: </span>
+                  <span>{currentSvg?.props[1].description}</span>
+                </Li>
+                <Li>
+                  <span>{currentSvg?.props[2].name}: </span>
+                  <span>{currentSvg?.props[2].description}</span>
+                </Li>
+              </ul>
             </div>
           )}
         </DetailContainer>
@@ -62,9 +78,6 @@ const SvgDetail = () => {
             </button>
           </ButtonContainer>
           {components.length > 0 && (
-            // <SyntaxHighlighter language="typescript" style={atomDark}>
-            //   {components[0]["js-snippet"]}
-            // </SyntaxHighlighter>
             <SyntaxHighlighter
               language={language === "ts" ? "typescript" : "javascript"}
               style={atomDark}
@@ -99,6 +112,9 @@ const DetailSection = styled.div`
     font-size: 22px;
     text-align: center;
   }
+  p.description {
+    margin-bottom: 30px;
+  }
   @media (max-width: 830px) {
     flex-direction: column;
     gap: 30px;
@@ -122,7 +138,7 @@ const DetailContainer = styled.div`
   }
 `;
 const DetailImage = styled.div`
-  width: 40%;
+  width: 14%;
   overflow: hidden;
   margin: auto;
   margin-bottom: 50px;
@@ -166,5 +182,18 @@ const ButtonContainer = styled.div`
       background-color: #3498db;
       color: #fff;
     }
+  }
+`;
+const Li = styled.li`
+  width: 100%;
+  display: flex;
+  border: 1px solid #2765d8;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: space-between;
+  span:nth-child(1) {
+    font-size: 22px;
   }
 `;
