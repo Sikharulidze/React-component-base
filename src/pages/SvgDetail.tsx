@@ -37,20 +37,12 @@ const SvgDetail = () => {
               </DetailImage>
               <p className="description">{currentSvg.description}</p>
               <h3>Component Props</h3>
-              <ul>
+              {currentSvg?.props.map(({ name, description }) => (
                 <Li>
-                  <span>{currentSvg?.props[0].name}: </span>
-                  <span>{currentSvg?.props[0].description}</span>
+                  <span>{name}: </span>
+                  <span>{description}</span>
                 </Li>
-                <Li>
-                  <span>{currentSvg?.props[1].name}: </span>
-                  <span>{currentSvg?.props[1].description}</span>
-                </Li>
-                <Li>
-                  <span>{currentSvg?.props[2].name}: </span>
-                  <span>{currentSvg?.props[2].description}</span>
-                </Li>
-              </ul>
+              ))}
             </div>
           )}
         </DetailContainer>
