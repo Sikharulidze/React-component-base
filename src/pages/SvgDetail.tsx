@@ -16,14 +16,11 @@ const SvgDetail = () => {
     return <div>Loading...</div>;
   }
   const currentSvg = components.find((component) => component.id === id);
-  console.log(currentSvg);
   useEffect(() => {
     if (currentSvg === undefined) {
       navigate("/svg");
     }
   }, [currentSvg]);
-  // const color = currentSvg?.props[1].description;
-  // const size = currentSvg?.props[0].
   return (
     <>
       <DetailSection>

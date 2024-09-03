@@ -1,11 +1,7 @@
 import { useEffect } from "react";
 import useSvgComponents from "../store/useSvgComponents";
-// import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-// import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-// import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
-// import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
@@ -17,7 +13,6 @@ const SvgComponents = () => {
   const handleSvgClick = (id: string) => {
     navigate(`/svg/${id}`);
   };
-  console.log(components);
   return (
     <Main>
       <DisplayBox>
