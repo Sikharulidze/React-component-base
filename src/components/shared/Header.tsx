@@ -158,7 +158,6 @@ const ImageWrapper = styled.div`
 const StyledImage = styled.img`
   width: 100%;
   height: 100%;
-  border-radius: 50%;
 `;
 const DesktopHeader = styled.header`
   padding: 8px 50px 8px 80px;
