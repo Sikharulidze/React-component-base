@@ -36,7 +36,9 @@ const SvgComponents = () => {
     <Main>
       <SearchBar
         searchTerm={searchTerm}
-        onChange={(e) => setSearchTerm((e.target as HTMLInputElement).value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setSearchTerm(e.target.value)
+        }
       />
       {/* <DisplayBox>
         {components.map((component) => (
