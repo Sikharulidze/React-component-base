@@ -15,6 +15,22 @@ const SvgDetail = () => {
   if (!components) {
     return <div>Loading...</div>;
   }
+  const handleCopyCode = () => {
+    const code = getSyntaxHighlighterCode();
+    navigator.clipboard.writeText(code).then(() => {
+      console.log("Code copied to clipboard");
+    });
+  };
+
+  const getSyntaxHighlighterCode = () => {
+    const code =
+      language === "default"
+        ? components[0].base
+        : language === "js"
+        ? components[0]["js-snippet"]
+        : components[0]["ts-snippet"];
+    return code;
+  };
   const currentSvg = components.find((component) => component.id === id);
   useEffect(() => {
     if (currentSvg === undefined) {
@@ -26,7 +42,7 @@ const SvgDetail = () => {
       <DetailSection>
         <DetailContainer>
           {currentSvg && (
-            <div key={currentSvg.id}>
+            <div>
               <h2>{currentSvg.name}</h2>
               <DetailImage>
                 <img
@@ -66,6 +82,7 @@ const SvgDetail = () => {
             >
               TS
             </button>
+            <button onClick={handleCopyCode}>Copy</button>
           </ButtonContainer>
           {components.length > 0 && (
             <SyntaxHighlighter
