@@ -25,11 +25,12 @@ const SvgDetail = () => {
 
   const getSyntaxHighlighterCode = () => {
     const code =
-      language === "default"
-        ? components[0].base
+      currentSvg &&
+      (language === "default"
+        ? currentSvg.base
         : language === "js"
-        ? components[0]["js-snippet"]
-        : components[0]["ts-snippet"];
+        ? currentSvg["js-snippet"]
+        : currentSvg["ts-snippet"]);
     return code;
   };
   const currentSvg = components.find((component) => component.id === id);
