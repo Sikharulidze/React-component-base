@@ -18,7 +18,7 @@ const SvgDetail = () => {
 
   const handleCopyCode = () => {
     const code = getSyntaxHighlighterCode();
-    navigator.clipboard.writeText(code).then(() => {
+    navigator.clipboard.writeText(code ?? "").then(() => {
       console.log("Code copied to clipboard");
     });
   };
