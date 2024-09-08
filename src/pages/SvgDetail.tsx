@@ -15,6 +15,7 @@ const SvgDetail = () => {
   if (!components) {
     return <div>Loading...</div>;
   }
+
   const handleCopyCode = () => {
     const code = getSyntaxHighlighterCode();
     navigator.clipboard.writeText(code).then(() => {
@@ -40,63 +41,65 @@ const SvgDetail = () => {
   return (
     <>
       <DetailSection>
-        <DetailContainer>
-          {currentSvg && (
-            <div>
-              <h2>{currentSvg.name}</h2>
-              <DetailImage>
-                <img
-                  style={{ width: "100%" }}
-                  src={import.meta.env.VITE_API_URL + currentSvg.image}
-                  alt={currentSvg.name}
-                />
-              </DetailImage>
-              <p className="description">{currentSvg.description}</p>
-              <h3>Component Props</h3>
-              {currentSvg?.props.map((prop) => (
-                <Li key={prop.name}>
-                  <span>{prop.name}: </span>
-                  <span>{prop.description}</span>
-                </Li>
-              ))}
-            </div>
-          )}
-        </DetailContainer>
-        <SvgSource>
-          <ButtonContainer>
-            <button
-              className={language === "default" ? "active" : ""}
-              onClick={() => handleLanguageChange("default")}
-            >
-              Default
-            </button>
-            <button
-              className={language === "js" ? "active" : ""}
-              onClick={() => handleLanguageChange("js")}
-            >
-              JS
-            </button>
-            <button
-              className={language === "ts" ? "active" : ""}
-              onClick={() => handleLanguageChange("ts")}
-            >
-              TS
-            </button>
-            <button onClick={handleCopyCode}>Copy</button>
-          </ButtonContainer>
-          {components.length > 0 && (
-            <SyntaxHighlighter
-              language={language === "ts" ? "typescript" : "javascript"}
-              style={atomDark}
-            >
-              {language === "default"
-                ? components[0].base
-                : language === "js"
-                ? components[0]["js-snippet"]
-                : components[0]["ts-snippet"]}
-            </SyntaxHighlighter>
-          )}
-        </SvgSource>
+        {currentSvg && (
+          <>
+            <DetailContainer>
+              <div>
+                <h2>{currentSvg.name}</h2>
+                <DetailImage>
+                  <img
+                    style={{ width: "100%" }}
+                    src={import.meta.env.VITE_API_URL + currentSvg.image}
+                    alt={currentSvg.name}
+                  />
+                </DetailImage>
+                <p className="description">{currentSvg.description}</p>
+                <h3>Component Props</h3>
+                {currentSvg?.props.map((prop) => (
+                  <Li key={prop.name}>
+                    <span>{prop.name}: </span>
+                    <span>{prop.description}</span>
+                  </Li>
+                ))}
+              </div>
+            </DetailContainer>
+            <SvgSource>
+              <ButtonContainer>
+                <button
+                  className={language === "default" ? "active" : ""}
+                  onClick={() => handleLanguageChange("default")}
+                >
+                  Default
+                </button>
+                <button
+                  className={language === "js" ? "active" : ""}
+                  onClick={() => handleLanguageChange("js")}
+                >
+                  JS
+                </button>
+                <button
+                  className={language === "ts" ? "active" : ""}
+                  onClick={() => handleLanguageChange("ts")}
+                >
+                  TS
+                </button>
+                <button onClick={handleCopyCode}>Copy</button>
+              </ButtonContainer>
+              {components.length > 0 && (
+                <SyntaxHighlighter
+                  language={language === "ts" ? "typescript" : "javascript"}
+                  style={atomDark}
+                >
+                  {language === "default"
+                    ? currentSvg.base
+                    : language === "js"
+                    ? currentSvg["js-snippet"]
+                    : currentSvg["ts-snippet"]}
+                </SyntaxHighlighter>
+              )}
+            </SvgSource>
+          </>
+        )}
       </DetailSection>
     </>
   );
