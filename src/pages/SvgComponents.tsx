@@ -40,18 +40,6 @@ const SvgComponents = () => {
           setSearchTerm(e.target.value)
         }
       />
-      {/* <DisplayBox>
-        {components.map((component) => (
-          <ImageBox
-            key={component.id}
-            onClick={() => handleSvgClick(component.id)}
-          >
-            <ImageElement
-              src={import.meta.env.VITE_API_URL + component.image}
-            />
-          </ImageBox>
-        ))}
-      </DisplayBox> */}
       <DisplayBox>
         {filteredComponents.map((component) => (
           <ImageBox
