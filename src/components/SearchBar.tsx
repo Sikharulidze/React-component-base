@@ -1,4 +1,8 @@
-const SearchBar = ({ searchTerm, onChange }) => {
+interface SearchBarProps {
+  searchTerm: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+const SearchBar = ({ searchTerm, onChange }: SearchBarProps) => {
   return (
     <>
       <input
