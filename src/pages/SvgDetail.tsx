@@ -26,7 +26,7 @@ const SvgDetail = () => {
       <DetailSection>
         <DetailContainer>
           {currentSvg && (
-            <div>
+            <div key={currentSvg.id}>
               <h2>{currentSvg.name}</h2>
               <DetailImage>
                 <img
@@ -37,10 +37,10 @@ const SvgDetail = () => {
               </DetailImage>
               <p className="description">{currentSvg.description}</p>
               <h3>Component Props</h3>
-              {currentSvg?.props.map(({ name, description }) => (
-                <Li>
-                  <span>{name}: </span>
-                  <span>{description}</span>
+              {currentSvg?.props.map((prop) => (
+                <Li key={prop.name}>
+                  <span>{prop.name}: </span>
+                  <span>{prop.description}</span>
                 </Li>
               ))}
             </div>
