@@ -4,9 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSvgComponents from "../store/useSvgComponents";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { copyClickCounter } from "../services/counter-service";
 const SvgDetail = () => {
   const { id } = useParams();
   const { components } = useSvgComponents();
+  const currentSvg = components.find((component) => component.id === id);
   const navigate = useNavigate();
   const [language, setLanguage] = useState("default");
   const handleLanguageChange = (lang: string) => {
@@ -16,11 +18,14 @@ const SvgDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const handleCopyCode = () => {
+  const handleCopyCode = async () => {
     const code = getSyntaxHighlighterCode();
     navigator.clipboard.writeText(code ?? "").then(() => {
       console.log("Code copied to clipboard");
     });
+    if (currentSvg) {
+      await copyClickCounter(currentSvg.name);
+    }
   };
 
   const getSyntaxHighlighterCode = () => {
@@ -33,7 +38,6 @@ const SvgDetail = () => {
         : currentSvg["ts-snippet"]);
     return code;
   };
-  const currentSvg = components.find((component) => component.id === id);
   useEffect(() => {
     if (currentSvg === undefined) {
       navigate("/svg");
