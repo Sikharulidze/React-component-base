@@ -1,16 +1,18 @@
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 import { useNavigate, useParams } from "react-router-dom";
 import useSvgComponents from "../store/useSvgComponents";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { copyClickCounter } from "../services/counter-service";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 const SvgDetail = () => {
   const { id } = useParams();
   const { components } = useSvgComponents();
   const currentSvg = components.find((component) => component.id === id);
   const navigate = useNavigate();
   const [language, setLanguage] = useState("default");
+  const [copying, setCoping] = useState(false);
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
   };
@@ -19,12 +21,14 @@ const SvgDetail = () => {
   }
 
   const handleCopyCode = async () => {
+    setCoping(true);
     const code = getSyntaxHighlighterCode();
     navigator.clipboard.writeText(code ?? "").then(() => {
       console.log("Code copied to clipboard");
     });
     if (currentSvg) {
       await copyClickCounter(currentSvg.name);
+      setCoping(false);
     }
   };
 
@@ -88,7 +92,9 @@ const SvgDetail = () => {
                 >
                   TS
                 </button>
-                <button onClick={handleCopyCode}>Copy</button>
+                <button onClick={handleCopyCode} disabled={copying}>
+                  {copying ? "...copying" : "Copy"}
+                </button>
               </ButtonContainer>
               {components.length > 0 && (
                 <SyntaxHighlighter
