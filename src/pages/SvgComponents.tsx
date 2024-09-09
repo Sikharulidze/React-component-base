@@ -1,22 +1,47 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSvgComponents from "../store/useSvgComponents";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
+import SearchBar from "../components/SearchBar";
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
+  interface SvgComponent {
+    id: string;
+    name: string;
+    image: string;
+    "js-snippet": string;
+  }
   const navigate = useNavigate();
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredComponents, setFilteredComponents] = useState<SvgComponent[]>(
+    []
+  );
   useEffect(() => {
     fetchSvgComponents();
   }, []);
   const handleSvgClick = (id: string) => {
     navigate(`/svg/${id}`);
   };
+  useEffect(() => {
+    const escapedSearchTerm = searchTerm
+      .trim()
+      .toLowerCase()
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const filteredComponents = components.filter((component) =>
+      component.name.toLowerCase().includes(escapedSearchTerm)
+    );
+    setFilteredComponents(filteredComponents);
+  }, [components, searchTerm]);
   return (
     <Main>
+      <SearchBar
+        searchTerm={searchTerm}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setSearchTerm(e.target.value)
+        }
+      />
       <DisplayBox>
-        {components.map((component) => (
+        {filteredComponents.map((component) => (
           <ImageBox
             key={component.id}
             onClick={() => handleSvgClick(component.id)}
