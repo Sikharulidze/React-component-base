@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Header from "./components/shared/Header";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import SvgComponents from "./pages/SvgComponents";
 import SvgDetail from "./pages/SvgDetail";
 import Home from "./pages/Home";
