@@ -3,6 +3,8 @@ import Header from "./components/shared/Header";
 import { Navigate, Route, Routes } from "react-router-dom";
 import SvgComponents from "./pages/SvgComponents";
 import SvgDetail from "./pages/SvgDetail";
+import Home from "./pages/Home";
+import Feedback from "./pages/Feedback";
 
 function App() {
   console.log(import.meta.env.VITE_API_URL);
@@ -10,9 +12,10 @@ function App() {
     <Main>
       <Header />
       <Routes>
-        <Route path="/" element={<Navigate to="/svg" replace={true} />} />
+        <Route path="/" element={<Home />} />
         <Route path="/svg" element={<SvgComponents />} />
         <Route path="/svg/:id" element={<SvgDetail />} />
+        <Route path="/feedback" element={<Feedback />} />
       </Routes>
     </Main>
   );
