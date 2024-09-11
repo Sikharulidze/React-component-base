@@ -1,11 +1,14 @@
-import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
-
 import { useNavigate, useParams } from "react-router-dom";
 import useSvgComponents from "../store/useSvgComponents";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import styled from "styled-components";
 import { copyClickCounter } from "../services/counter-service";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+const SyntaxHighlighter = lazy(
+  () => import("react-syntax-highlighter/dist/esm/default-highlight")
+);
+
 const SvgDetail = () => {
   const { id } = useParams();
   const { components } = useSvgComponents();
@@ -97,16 +100,14 @@ const SvgDetail = () => {
                 </button>
               </ButtonContainer>
               {components.length > 0 && (
-                <SyntaxHighlighter
-                  language={language === "ts" ? "typescript" : "javascript"}
-                  style={atomDark}
-                >
-                  {language === "default"
-                    ? currentSvg.base
-                    : language === "js"
-                    ? currentSvg["js-snippet"]
-                    : currentSvg["ts-snippet"]}
-                </SyntaxHighlighter>
+                <Suspense fallback={<div>Loading SyntaxHighlighter...</div>}>
+                  <SyntaxHighlighter
+                    language={language === "ts" ? "typescript" : "javascript"}
+                    style={atomDark}
+                  >
+                    {getSyntaxHighlighterCode()}
+                  </SyntaxHighlighter>
+                </Suspense>
               )}
             </SvgSource>
           </>
