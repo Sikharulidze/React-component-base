@@ -1,45 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSvgComponents from "../store/useSvgComponents";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
-  interface SvgComponent {
-    id: string;
-    name: string;
-    image: string;
-    "js-snippet": string;
-  }
+
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredComponents, setFilteredComponents] = useState<SvgComponent[]>(
-    []
-  );
+  const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
   useEffect(() => {
     fetchSvgComponents();
   }, []);
   const handleSvgClick = (id: string) => {
     navigate(`/svg/${id}`);
   };
-  useEffect(() => {
-    const escapedSearchTerm = searchTerm
+
+  const escapedSearchTerm = useMemo(() => {
+    return searchTerm
       .trim()
       .toLowerCase()
       .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const filteredComponents = components.filter((component) =>
+  }, [searchTerm]);
+
+  const filteredComponents = useMemo(() => {
+    return components.filter((component) =>
       component.name.toLowerCase().includes(escapedSearchTerm)
     );
-    setFilteredComponents(filteredComponents);
-  }, [components, searchTerm]);
+  }, [components, escapedSearchTerm]);
+
   return (
     <Main>
-      <SearchBar
-        searchTerm={searchTerm}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setSearchTerm(e.target.value)
-        }
-      />
+      <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
       <DisplayBox>
         {filteredComponents.map((component) => (
           <ImageBox
@@ -52,13 +47,6 @@ const SvgComponents = () => {
           </ImageBox>
         ))}
       </DisplayBox>
-      {/* <div style={{width: "500px"}}>
-        {components.length > 0 && (
-          <SyntaxHighlighter language="typescript" style={atomDark}>
-            {components[0]["js-snippet"]}
-          </SyntaxHighlighter>
-        )}
-      </div> */}
     </Main>
   );
 };
@@ -77,6 +65,7 @@ const DisplayBox = styled.div`
   width: 100%;
   padding: 24px;
   display: flex;
+  justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
 `;
@@ -92,7 +81,3 @@ const ImageBox = styled.div`
 const ImageElement = styled.img`
   width: 100%;
 `;
-
-// const SnippetBox = styled.div`
-//   width: 50%;
-// `;
