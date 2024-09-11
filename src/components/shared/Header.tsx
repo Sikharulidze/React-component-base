@@ -18,6 +18,7 @@ const Header = () => {
         <nav>
           <StyledNavLink to="/">Home</StyledNavLink>
           <StyledNavLink to="/svg">SVG Components</StyledNavLink>
+          <StyledNavLink to="/feedback">Feedback</StyledNavLink>
         </nav>
       </DesktopHeader>
       <MobileHeader>
@@ -30,6 +31,7 @@ const Header = () => {
           <nav>
             <StyledNavLink to="/">Home</StyledNavLink>
             <StyledNavLink to="/svg">SVG Components</StyledNavLink>
+            <StyledNavLink to="/feedback">Feedback</StyledNavLink>
           </nav>
         ) : null}
         <Container className={isOpen ? "open" : ""} onClick={handleClick}>
