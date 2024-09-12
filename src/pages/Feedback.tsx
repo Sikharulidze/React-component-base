@@ -16,6 +16,7 @@ const Feedback = () => {
 
   const onSubmit: SubmitHandler<FeedbackType> = async (data) => {
     console.log(data);
+    reset();
   };
   return (
     <Main>
@@ -39,7 +40,9 @@ const Feedback = () => {
           {...register("email")}
         />
         <Error>{errors.email && errors.email.message}</Error>
+        <label htmlFor="text">Text</label>
         <StyledTextarea
+          id="text"
           placeholder="I think ..."
           {...register("text")}
         ></StyledTextarea>
@@ -143,8 +146,12 @@ const StyledInput = styled.input`
   flex-direction: row;
   border: 1px solid gray;
   border-radius: 12px;
+  margin-top: 5px;
   &::placeholder {
     color: gray;
+  }
+  @media (min-width: 768px) {
+    margin-top: 10px;
   }
 `;
 
@@ -152,7 +159,7 @@ const StyledTextarea = styled.textarea`
   resize: none;
   width: 100%;
   height: 100px;
-  margin-top: 10px;
+  margin-top: 5px;
   font-family: "Rubik", sans-serif;
   font-size: 14px;
   font-style: normal;
@@ -171,7 +178,7 @@ const StyledTextarea = styled.textarea`
     color: gray;
   }
   @media (min-width: 768px) {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 `;
 
@@ -186,13 +193,13 @@ const SendBtn = styled.button`
   line-height: normal;
   background-color: #4d56d1;
   border-radius: 5px;
-  margin-top: 15px;
+  margin-top: 10px;
   border: none;
   cursor: pointer;
   margin-left: auto;
   @media (min-width: 768px) {
     padding: 10px 20px;
-    margin-top: 30px;
+    margin-top: 20px;
   }
 `;
 
