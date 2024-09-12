@@ -61,10 +61,10 @@ const Home = () => {
           </p>
           <button onClick={handleNavigateToSvgPage}>Start Now</button>
         </div>
-        <img src={icon} alt="" />
+        <img src={icon} alt="components icon" />
       </TextContainer>
       <TextContainer>
-        <img src={feedback} alt="" />
+        <img src={feedback} alt="feedback icon" />
         <div>
           <p>We Value Your Feedback!</p>
           <p>
@@ -86,7 +86,7 @@ const Home = () => {
             efficient tools to seamless integrations, we're here to help you
             tackle challenges and achieve your goals with ease.
           </p>
-          <img src={logo} alt="" />
+          <img src={logo} alt="logo" />
         </div>
       </TextContainer>
     </>
