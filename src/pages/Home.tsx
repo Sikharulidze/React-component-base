@@ -16,7 +16,16 @@ const Home = () => {
   }, [location]);
   return (
     <>
-
+      {isHomePage && (
+        <style>{`
+    body {
+      background: url("${bg}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  `}</style>
+      )}
       <HomeContainer>
         <div>
           <h1>Welcome to React Components Central</h1>
