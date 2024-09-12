@@ -14,7 +14,11 @@ const Feedback = () => {
         Please reach out to us with your thoughts and let us know how we can
         enhance your experience. Thank you for being a part of our community!
       </Description>
-      <Form></Form>
+      <Form>
+        <StyledInput type="text" placeholder="Email" />
+        <StyledTextarea placeholder="I think ..."></StyledTextarea>
+        <SendBtn type="submit">SEND</SendBtn>
+      </Form>
     </Main>
   );
 };
@@ -30,6 +34,7 @@ const Main = styled.main`
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  padding-bottom: 50px;
 `;
 
 const animTextFlowKeys = keyframes`
@@ -74,15 +79,92 @@ const Container = styled.div`
   text-rendering: optimizeLegibility;
   text-align: center;
   padding: 2rem;
+  width: 80%;
 `;
 
 const Description = styled.p`
-  width: 50%;
+  width: 80%;
+  @media (min-width: 768px) {
+    width: 50%;
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 80%;
   margin: auto;
+  margin-top: 15px;
+  @media (min-width: 768px) {
+    width: 50%;
+    margin-top: 30px;
+  }
+`;
+
+const StyledInput = styled.input`
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px;
+  box-sizing: border-box;
+  outline: none;
+  resize: none;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  border: 1px solid gray;
+  border-radius: 12px;
+  &::placeholder {
+    color: gray;
+  }
+`;
+
+const StyledTextarea = styled.textarea`
+  resize: none;
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px;
+  box-sizing: border-box;
+  outline: none;
+  resize: none;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  border: 1px solid gray;
+  border-radius: 12px;
+  &::placeholder {
+    color: gray;
+  }
+  @media (min-width: 768px) {
+    margin-top: 15px;
+  }
+`;
+
+const SendBtn = styled.button`
+  padding: 5px 10px;
+  flex-shrink: 0;
+  color: white;
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background-color: #4d56d1;
+  border-radius: 5px;
+  margin-top: 15px;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  @media (min-width: 768px) {
+    padding: 10px 20px;
+    margin-top: 30px;
+  }
 `;
