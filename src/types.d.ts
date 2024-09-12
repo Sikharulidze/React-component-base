@@ -15,3 +15,8 @@ export type SvgComponentType = {
   id: string;
   collectionName?: string;
 };
+
+export type FeedbackType = {
+  text: string;
+  email?: string;
+};
