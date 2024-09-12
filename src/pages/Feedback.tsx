@@ -1,6 +1,22 @@
 import styled, { keyframes } from "styled-components";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SubmitHandler, useForm } from "react-hook-form";
+import feedbackSchema from "../schemas/feedback-schema";
+import { FeedbackType } from "../types";
 
 const Feedback = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FeedbackType>({
+    resolver: yupResolver(feedbackSchema),
+  });
+
+  const onSubmit: SubmitHandler<FeedbackType> = async (data) => {
+    console.log(data);
+  };
   return (
     <Main>
       <Container>
@@ -14,7 +30,7 @@ const Feedback = () => {
         Please reach out to us with your thoughts and let us know how we can
         enhance your experience. Thank you for being a part of our community!
       </Description>
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <StyledInput type="text" placeholder="Email" />
         <StyledTextarea placeholder="I think ..."></StyledTextarea>
         <SendBtn type="submit">SEND</SendBtn>
