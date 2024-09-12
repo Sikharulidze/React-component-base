@@ -30,18 +30,6 @@ const Home = () => {
       <HomeContainer>
         <div>
           <h1>Welcome to React Components Central</h1>
-          {/* <p>
-        Explore our comprehensive collection of React components designed
-        for developers of all levels. Our site offers a range of components,
-        each with detailed code snippets in both JavaScript and TypeScript.
-        Whether you're building a new project or enhancing an existing one,
-        you'll find easy-to-use elements that fit seamlessly into your
-        workflow. Click on any component to view its code, copy it, and
-        integrate it into your applications with ease. Dive in and elevate
-        your development experience today!
-      </p> */}
-          {/* <p>SVG icons components</p> */}
-          {/* <h3>We Value Your Feedback</h3> */}
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path
@@ -85,7 +73,7 @@ const Home = () => {
         <div className="about">
           <p>Who we are?</p>
           <p>
-            We’re a team of developers dedicated to making your development life
+            We're a team of developers dedicated to making your development life
             easier and more enjoyable. Our focus is on creating solutions that
             streamline your workflow and enhance your productivity. From
             efficient tools to seamless integrations, we're here to help you
