@@ -1,8 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 const Header = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -16,9 +19,18 @@ const Header = () => {
           </ImageWrapper>
         </Link>
         <nav>
-          <StyledNavLink to="/">Home</StyledNavLink>
-          <StyledNavLink to="/svg">SVG Components</StyledNavLink>
-          <StyledNavLink to="/feedback">Feedback</StyledNavLink>
+          <StyledNavLink to="/" className={isHomePage ? "home-page" : ""}>
+            Home
+          </StyledNavLink>
+          <StyledNavLink to="/svg" className={isHomePage ? "home-page" : ""}>
+            SVG Components
+          </StyledNavLink>
+          <StyledNavLink
+            to="/feedback"
+            className={isHomePage ? "home-page" : ""}
+          >
+            Feedback
+          </StyledNavLink>
         </nav>
       </DesktopHeader>
       <MobileHeader>
@@ -86,7 +98,9 @@ const StyledNavLink = styled(NavLink)`
   font-weight: 800;
   font-size: 22px;
   position: relative;
-
+  &.home-page {
+    color: white;
+  }
   &.active {
     color: #2765d8;
   }
