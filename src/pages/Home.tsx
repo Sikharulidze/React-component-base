@@ -19,6 +19,9 @@ const Home = () => {
   const handleNavigateToSvgPage = () => {
     navigate("/svg");
   };
+  const handleNavigateToFeedbackPage = () => {
+    navigate("/feedback");
+  };
   return (
     <>
       {isHomePage && (
@@ -70,7 +73,7 @@ const Home = () => {
             thoughts to share or need assistance, feel free to reach out to us.
             We're here to help and look forward to hearing from you!
           </p>
-          <button>Leave feedback</button>
+          <button onClick={handleNavigateToFeedbackPage}>Leave feedback</button>
         </div>
       </TextContainer>
       <TextContainer>
