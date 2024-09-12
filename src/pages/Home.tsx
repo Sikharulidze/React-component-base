@@ -3,7 +3,7 @@ import feedback from "../assets/images/customer-experience.png";
 import icon from "../assets/images/component.png";
 import logo from "../assets/images/logo.png";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const Home = () => {
   const location = useLocation();
@@ -15,6 +15,10 @@ const Home = () => {
       setIsHomePage(false);
     }
   }, [location]);
+  const navigate = useNavigate();
+  const handleNavigateToSvgPage = () => {
+    navigate("/svg");
+  };
   return (
     <>
       {isHomePage && (
@@ -52,7 +56,7 @@ const Home = () => {
             integrate it into your applications with ease. Dive in and elevate
             your development experience today!
           </p>
-          <button>Start Now</button>
+          <button onClick={handleNavigateToSvgPage}>Start Now</button>
         </div>
         <img src={icon} alt="" />
       </TextContainer>
