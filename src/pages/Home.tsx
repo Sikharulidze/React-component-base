@@ -4,6 +4,7 @@ import icon from "../assets/images/component.png";
 import logo from "../assets/images/logo.png";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 const Home = () => {
   const location = useLocation();
   const [isHomePage, setIsHomePage] = useState(false);
@@ -98,3 +99,86 @@ const Home = () => {
 };
 
 export default Home;
+const HomeContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+  // position: fixed;
+  // z-index: -1;
+  // top: 0;
+
+  div {
+    width: 70%;
+    margin: auto;
+    height: fit-content;
+    border-radius: 20px;
+    padding: 20px 50px;
+  }
+  h1 {
+    font-size: 80px;
+    margin-top: 100px;
+    text-align: center;
+    // background: linear-gradient(to right, #1084ff, #ee2fff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    // -webkit-text-stroke: 1px #42000dbb;
+    -webkit-text-stroke: 2px #000;
+  }
+  p {
+    text-align: center;
+    font-size: 18px;
+  }
+  h3 {
+    font-size: 35px;
+    text-align: center;
+  }
+  svg {
+    position: absolute;
+    bottom: -98px;
+  }
+`;
+
+const TextContainer = styled.div`
+  width: 100%;
+  background: #fff;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  div {
+    width: 50%;
+  }
+  p:nth-child(1) {
+    font-size: 30px;
+    color: #1084ff;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
+  p {
+    color: #000;
+    width: 100%;
+    font-size: 18px;
+    color: gray;
+  }
+  button {
+    background: linear-gradient(to right, #1084ff, #ee2fff);
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 20px;
+    display: block;
+    margin-top: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+  }
+  .about {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+  }
+`;
