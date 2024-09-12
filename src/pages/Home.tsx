@@ -38,13 +38,7 @@ const Home = () => {
         <div>
           <h1>Welcome to React Components Central</h1>
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path
-            fill="#fff"
-            fill-opacity="1"
-            d="M0,192L120,202.7C240,213,480,235,720,218.7C960,203,1200,149,1320,122.7L1440,96L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
-          ></path>
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,32L120,80C240,128,480,224,720,224C960,224,1200,128,1320,80L1440,32L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path></svg>
       </HomeContainer>
       <TextContainer>
         <div>
@@ -96,7 +90,7 @@ const Home = () => {
 export default Home;
 const HomeContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 85vh;
   margin: auto;
 
   div {
@@ -125,7 +119,7 @@ const HomeContainer = styled.div`
   }
   svg {
     position: absolute;
-    bottom: -98px;
+    bottom: 0px;
   }
 `;
 
