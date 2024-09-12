@@ -1,25 +1,46 @@
 import styled, { keyframes } from "styled-components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import feedbackSchema from "../schemas/feedback-schema";
 import { FeedbackType } from "../types";
+import { sendFeedback } from "../services/feedback-services";
 
 const Feedback = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<FeedbackType>({
     resolver: yupResolver(feedbackSchema),
   });
 
   const onSubmit: SubmitHandler<FeedbackType> = async (data) => {
-    console.log(data);
-    reset();
+    const loadingToast = toast.loading("Sending...");
+    try {
+      await sendFeedback(data);
+      toast.update(loadingToast, {
+        render: "Feedback sent successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+      reset();
+    } catch (error) {
+      toast.clearWaitingQueue();
+      toast.update(loadingToast, {
+        render: `Error: something went wrong`,
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    }
   };
   return (
     <Main>
+      <ToastContainer />
       <Container>
         <AnimatedSpan>Your experience matters to us!</AnimatedSpan>
       </Container>
@@ -47,7 +68,9 @@ const Feedback = () => {
           {...register("text")}
         ></StyledTextarea>
         <Error>{errors.text && errors.text.message}</Error>
-        <SendBtn type="submit">SEND</SendBtn>
+        <SendBtn type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "SENDING..." : "SEND"}
+        </SendBtn>
       </Form>
     </Main>
   );
