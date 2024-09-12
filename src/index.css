@@ -29,5 +29,6 @@ body,
 }
 ::-webkit-scrollbar-track
 {
+  color: #42000dbb;
   background-color: white;
 }
