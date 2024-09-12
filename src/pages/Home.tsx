@@ -38,7 +38,13 @@ const Home = () => {
         <div>
           <h1>Welcome to React Components Central</h1>
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,32L120,80C240,128,480,224,720,224C960,224,1200,128,1320,80L1440,32L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path
+            fill="#fff"
+            fill-opacity="1"
+            d="M0,32L120,80C240,128,480,224,720,224C960,224,1200,128,1320,80L1440,32L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
+          ></path>
+        </svg>
       </HomeContainer>
       <TextContainer>
         <div>
@@ -113,13 +119,24 @@ const HomeContainer = styled.div`
     text-align: center;
     font-size: 18px;
   }
-  h3 {
-    font-size: 35px;
-    text-align: center;
-  }
   svg {
     position: absolute;
     bottom: 0px;
+  }
+  @media screen and (max-width: 800px) {
+    h1 {
+      font-size: 60px;
+    }
+    div {
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 570px) {
+    height: 82vh;
+    h1 {
+      font-size: 40px;
+      text-align: center;
+    }
   }
 `;
 
@@ -132,6 +149,9 @@ const TextContainer = styled.div`
   align-items: center;
   div {
     width: 50%;
+  }
+  img {
+    width: 40%;
   }
   p:nth-child(1) {
     font-size: 30px;
@@ -164,5 +184,41 @@ const TextContainer = styled.div`
     width: 80%;
     margin: auto;
     text-align: center;
+  }
+  @media screen and (max-width: 1190px) {
+    padding: 20px 30px;
+    div {
+      width: 40%;
+    }
+  }
+  @media screen and (max-width: 900px) {
+    padding: 20px;
+    div {
+      width: 80%;
+      text-align: center;
+    }
+    button {
+      margin: auto;
+      margin-top: 20px;
+    }
+    img {
+      width: 30%;
+    }
+    flex-direction: column;
+  }
+  @media screen and (max-width: 570px) {
+    padding: 50px 0 0 0;
+    div {
+      width: 98%;
+      text-align: center;
+    }
+    button {
+      margin: auto;
+      margin-top: 20px;
+    }
+    img {
+      width: 80%;
+    }
+    flex-direction: column;
   }
 `;
