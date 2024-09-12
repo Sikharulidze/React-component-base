@@ -75,7 +75,7 @@ const Home = () => {
       </TextContainer>
       <TextContainer>
         <img src={feedback} alt="feedback icon" />
-        <div style={{ opacity: scrollPosition > 1200 ? 1 : 0 }}>
+        <div style={{ opacity: scrollPosition > 1000 ? 1 : 0 }}>
           <p>We Value Your Feedback!</p>
           <p>
             Please know that your feedback is taken seriously, and we are
@@ -89,7 +89,7 @@ const Home = () => {
       <TextContainer>
         <div
           className="about"
-          style={{ opacity: scrollPosition > 1600 ? 1 : 0 }}
+          style={{ opacity: scrollPosition > 1300 ? 1 : 0 }}
         >
           <p>Who we are?</p>
           <p>
