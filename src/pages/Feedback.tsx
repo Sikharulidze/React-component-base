@@ -31,8 +31,17 @@ const Feedback = () => {
         enhance your experience. Thank you for being a part of our community!
       </Description>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <StyledInput type="text" placeholder="Email" />
-        <StyledTextarea placeholder="I think ..."></StyledTextarea>
+        <label htmlFor="email">Your Email(optional)</label>
+        <StyledInput
+          type="text"
+          id="email"
+          placeholder="Email"
+          {...register("email")}
+        />
+        <StyledTextarea
+          placeholder="I think ..."
+          {...register("text")}
+        ></StyledTextarea>
         <SendBtn type="submit">SEND</SendBtn>
       </Form>
     </Main>
