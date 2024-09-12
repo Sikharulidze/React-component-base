@@ -8,6 +8,7 @@ import styled from "styled-components";
 const Home = () => {
   const location = useLocation();
   const [isHomePage, setIsHomePage] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
   useEffect(() => {
     if (location.pathname === "/") {
       setIsHomePage(true);
@@ -15,6 +16,15 @@ const Home = () => {
       setIsHomePage(false);
     }
   }, [location]);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const navigate = useNavigate();
   const handleNavigateToSvgPage = () => {
     navigate("/svg");
@@ -65,7 +75,7 @@ const Home = () => {
       </TextContainer>
       <TextContainer>
         <img src={feedback} alt="feedback icon" />
-        <div>
+        <div style={{ opacity: scrollPosition > 1200 ? 1 : 0 }}>
           <p>We Value Your Feedback!</p>
           <p>
             Please know that your feedback is taken seriously, and we are
@@ -77,7 +87,10 @@ const Home = () => {
         </div>
       </TextContainer>
       <TextContainer>
-        <div className="about">
+        <div
+          className="about"
+          style={{ opacity: scrollPosition > 1600 ? 1 : 0 }}
+        >
           <p>Who we are?</p>
           <p>
             We're a team of developers dedicated to making your development life
@@ -149,6 +162,9 @@ const TextContainer = styled.div`
   align-items: center;
   div {
     width: 50%;
+    transition: opacity 0.5s ease-in-out;
+    animation: slideIn 1s ease-in-out;
+    animation-delay: 0.5s;
   }
   img {
     width: 40%;
@@ -184,6 +200,24 @@ const TextContainer = styled.div`
     width: 80%;
     margin: auto;
     text-align: center;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slideIn {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
   @media screen and (max-width: 1190px) {
     padding: 20px 30px;
