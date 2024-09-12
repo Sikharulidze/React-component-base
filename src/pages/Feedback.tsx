@@ -43,6 +43,7 @@ const Feedback = () => {
           placeholder="I think ..."
           {...register("text")}
         ></StyledTextarea>
+        <Error>{errors.text && errors.text.message}</Error>
         <SendBtn type="submit">SEND</SendBtn>
       </Form>
     </Main>
