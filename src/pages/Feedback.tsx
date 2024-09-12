@@ -38,6 +38,7 @@ const Feedback = () => {
           placeholder="Email"
           {...register("email")}
         />
+        <Error>{errors.email && errors.email.message}</Error>
         <StyledTextarea
           placeholder="I think ..."
           {...register("text")}
@@ -192,4 +193,13 @@ const SendBtn = styled.button`
     padding: 10px 20px;
     margin-top: 30px;
   }
+`;
+
+const Error = styled.div`
+  width: 100%;
+  margin-top: 5px;
+  margin-left: 10px;
+  color: #eb4343;
+  font-size: 12px;
+  height: 20px;
 `;
