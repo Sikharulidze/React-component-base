@@ -91,9 +91,6 @@ const HomeContainer = styled.div`
   width: 100%;
   height: 100vh;
   margin: auto;
-  // position: fixed;
-  // z-index: -1;
-  // top: 0;
 
   div {
     width: 70%;
@@ -106,11 +103,9 @@ const HomeContainer = styled.div`
     font-size: 80px;
     margin-top: 100px;
     text-align: center;
-    // background: linear-gradient(to right, #1084ff, #ee2fff);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    // -webkit-text-stroke: 1px #42000dbb;
     -webkit-text-stroke: 2px #000;
   }
   p {
