@@ -51,7 +51,7 @@ const Home = () => {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path
             fill="#fff"
-            fill-opacity="1"
+            fillOpacity="1"
             d="M0,32L120,80C240,128,480,224,720,224C960,224,1200,128,1320,80L1440,32L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
           ></path>
         </svg>
