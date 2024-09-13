@@ -16,12 +16,12 @@ const Infobox = styled.div`
   font-weight: bold;
   border: 3px solid #439cfb;
   padding: 6px 15px;
-  border-radius: 15px;
   width: fit-content;
   color: #439cfb;
   position: fixed;
   right: 3px;
-  top: 70px;
+  top: 72px;
+  background-color: white;
   transition: 0.3s;
   box-sizing: border-box;
   &:hover {
