@@ -22,5 +22,10 @@ const Infobox = styled.div`
   position: fixed;
   right: 3px;
   top: 80px;
+  transition: 0.3s;
   box-sizing: border-box;
+  &:hover {
+    margin-right: 10px;
+    transition: 0.3s;
+  }
 `;
