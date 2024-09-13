@@ -242,6 +242,7 @@ const TextContainer = styled.div`
   }
   @media screen and (max-width: 570px) {
     padding: 50px 0 0 0;
+    flex-direction: column;
     div {
       width: 98%;
       text-align: center;
@@ -253,6 +254,5 @@ const TextContainer = styled.div`
     img {
       width: 80%;
     }
-    flex-direction: column;
   }
 `;
