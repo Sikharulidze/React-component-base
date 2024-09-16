@@ -1,21 +1,12 @@
-import bg from "../assets/images/3dBackground.jpg";
 import feedback from "../assets/images/customer-experience.png";
 import icon from "../assets/images/component.png";
 import logo from "../assets/images/logo.png";
+import MainBackground from "../assets/images/3dBackground.jpg";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const Home = () => {
-  const location = useLocation();
-  const [isHomePage, setIsHomePage] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  useEffect(() => {
-    if (location.pathname === "/") {
-      setIsHomePage(true);
-    } else {
-      setIsHomePage(false);
-    }
-  }, [location]);
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -33,17 +24,7 @@ const Home = () => {
     navigate("/feedback");
   };
   return (
-    <>
-      {isHomePage && (
-        <style>{`
-    body {
-      background: url("${bg}");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-  `}</style>
-      )}
+    <Main style={{ backgroundImage: `url(${MainBackground})` }}>
       <HomeContainer>
         <div>
           <h1>Welcome to React Components Central</h1>
@@ -102,16 +83,22 @@ const Home = () => {
           <img src={logo} alt="logo" />
         </div>
       </TextContainer>
-    </>
+    </Main>
   );
 };
 
 export default Home;
+const Main = styled.main`
+  height: calc(100vh - 96px);
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
 const HomeContainer = styled.div`
   width: 100%;
-  height: 85vh;
   margin: auto;
-
+  min-height: 100%;
   div {
     width: 70%;
     margin: auto;
@@ -145,7 +132,6 @@ const HomeContainer = styled.div`
     }
   }
   @media screen and (max-width: 570px) {
-    height: 82vh;
     h1 {
       font-size: 40px;
       text-align: center;
