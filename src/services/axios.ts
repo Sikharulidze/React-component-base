@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL:
-    "https://react-component-base-api-production.up.railway.app" + "/api",
+  baseURL: import.meta.env.VITE_API_URL + "/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
