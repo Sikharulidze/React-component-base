@@ -110,9 +110,11 @@ const HomeContainer = styled.div`
     font-size: 80px;
     margin-top: 100px;
     text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     background-clip: text;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: white;
     -webkit-text-stroke: 2px #000;
   }
   p {

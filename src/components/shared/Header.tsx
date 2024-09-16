@@ -65,6 +65,7 @@ const Container = styled.div`
   align-items: center;
   width: 50px;
   height: 50px;
+  background-color: transparent;
   cursor: pointer;
   padding: 10px;
 
@@ -98,9 +99,6 @@ const StyledNavLink = styled(NavLink)`
   font-weight: 800;
   font-size: 22px;
   position: relative;
-  &.home-page {
-    color: white;
-  }
   &.active {
     color: #2765d8;
   }
@@ -179,6 +177,7 @@ const DesktopHeader = styled.header`
   padding: 8px 50px 8px 80px;
   text-align: center;
   display: none;
+  background-color: transparent;
   justify-content: space-between;
   align-items: center;
   @media (min-width: 600px) {
@@ -197,10 +196,9 @@ const MobileHeader = styled.header`
   nav {
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: transparent;
     position: absolute;
-    top: 80px;
-    right: 0;
+    top: 0;
     left: 0;
     transition: opacity 0.3s;
     opacity: 0;
