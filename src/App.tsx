@@ -6,7 +6,6 @@ import SvgDetail from "./pages/SvgDetail";
 import Home from "./pages/Home";
 import Feedback from "./pages/Feedback";
 import InfoBox from "./components/InfoBox";
-import { Close } from "./svg";
 
 function App() {
   return (
