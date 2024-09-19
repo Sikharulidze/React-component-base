@@ -8,7 +8,6 @@ import Feedback from "./pages/Feedback";
 import InfoBox from "./components/InfoBox";
 
 function App() {
-  console.log(import.meta.env.VITE_API_URL);
   return (
     <Main>
       <Header />
