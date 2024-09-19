@@ -180,7 +180,7 @@ const DesktopHeader = styled.header`
   background-color: transparent;
   justify-content: space-between;
   align-items: center;
-  @media (min-width: 600px) {
+  @media (min-width: 768px) {
     display: flex;
   }
 `;
@@ -190,21 +190,23 @@ const MobileHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 8px 10px;
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 768px) {
     display: none;
   }
   nav {
+    width: 100%;
+    background-color: white;
     display: flex;
     flex-direction: column;
-    background-color: transparent;
     position: absolute;
-    top: 0;
+    top: 96px;
     left: 0;
     transition: opacity 0.3s;
     opacity: 0;
     transform: translateY(-100%);
     transition: transform 0.5s, opacity 0.3s;
     animation: appear 0.5s forwards;
+    z-index: 1000;
   }
   &.open nav {
     transform: translateY(0);
