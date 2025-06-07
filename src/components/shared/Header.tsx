@@ -182,7 +182,10 @@ const DesktopHeader = styled.header`
   display: none;
   background-color: transparent;
   justify-content: space-between;
+  background-color: #18122a;
   align-items: center;
+  width: 1440;
+  height: 136px;
   @media (min-width: 768px) {
     display: flex;
   }

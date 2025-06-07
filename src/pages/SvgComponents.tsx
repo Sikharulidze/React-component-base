@@ -11,7 +11,6 @@ const SvgComponents = () => {
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
-  
 
   useEffect(() => {
     fetchSvgComponents();
@@ -35,23 +34,18 @@ const SvgComponents = () => {
 
   return (
     <Main>
+      
       <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
-      <DisplayBox>
-        {filteredComponents.map((component) => (
-          <ImageBox
-            key={component.id}
-            onClick={() => handleSvgClick(component.id)}
-          >
-            <ImageElement
-              src={import.meta.env.VITE_API_URL + component.image}
-            />
-          </ImageBox>
-        ))}
-         {Array.from({ length: 21 }).map((_, i) => (
-    <StyledBox key={i}/>
-  ))}
-      </DisplayBox>
-       
+
+      <ContentWrapper>
+        <InnerContainer>
+          <BoxGrid>
+            {Array.from({ length: 21 }).map((_, i) => (
+              <StyledBox key={i} />
+            ))}
+          </BoxGrid>
+        </InnerContainer>
+      </ContentWrapper>
     </Main>
   );
 };
@@ -61,37 +55,45 @@ export default SvgComponents;
 const Main = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  background-color: #18122a;
 `;
 
-const DisplayBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(7, 60px);
-  gap: 31px;
-  justify-content: center;
-  padding: 24px;
-`;
-
-
-const ImageBox = styled.div`
-  width: 60px;
-  height: 60px;
-  border: 1px solid gray;
-  padding: 15px;
-  border-radius: 15px;
-`;
-
-const ImageElement = styled.img`
+const ContentWrapper = styled.div`
   width: 100%;
+  padding: 24px 0;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  margin-top: 80px;
+`;
+
+const InnerContainer = styled.div`
+  width: 100%;
+  max-width: 1240px;
+`;
+
+const BoxGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 31px;
+  max-width: 1240px;
+  width: 100%;
+  justify-content: flex-start;
+  box-sizing: border-box;
 `;
 
 const StyledBox = styled.div`
-  width: 60px;
-  height: 60px;
-  background-color: navy;
+  width: 150px;
+  height: 150px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 3px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(135deg, #932eff, #2973ff);
+  background-color: transparent;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  flex-basis: 150px;
 `;
 
