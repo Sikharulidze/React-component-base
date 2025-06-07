@@ -105,6 +105,7 @@ const SvgDetail = () => {
                     language={language === "ts" ? "typescript" : "javascript"}
                     style={atomDark}
                   >
+                    
                     {getSyntaxHighlighterCode()}
                   </SyntaxHighlighter>
                 </Suspense>
@@ -112,6 +113,7 @@ const SvgDetail = () => {
             </SvgSource>
           </>
         )}
+        <div></div>
       </DetailSection>
     </>
   );

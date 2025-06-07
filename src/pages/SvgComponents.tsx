@@ -11,6 +11,7 @@ const SvgComponents = () => {
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+  
 
   useEffect(() => {
     fetchSvgComponents();
@@ -46,7 +47,11 @@ const SvgComponents = () => {
             />
           </ImageBox>
         ))}
+         {Array.from({ length: 21 }).map((_, i) => (
+    <StyledBox key={i}/>
+  ))}
       </DisplayBox>
+       
     </Main>
   );
 };
@@ -62,13 +67,13 @@ const Main = styled.div`
 `;
 
 const DisplayBox = styled.div`
-  width: 100%;
-  padding: 24px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(7, 60px);
+  gap: 31px;
   justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  padding: 24px;
 `;
+
 
 const ImageBox = styled.div`
   width: 60px;
@@ -81,3 +86,12 @@ const ImageBox = styled.div`
 const ImageElement = styled.img`
   width: 100%;
 `;
+
+const StyledBox = styled.div`
+  width: 60px;
+  height: 60px;
+  background-color: navy;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+`;
+
