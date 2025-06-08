@@ -3,6 +3,7 @@ import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+
 const Header = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
@@ -13,6 +14,7 @@ const Header = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
   return (
     <>
       <DesktopHeader>
@@ -22,33 +24,56 @@ const Header = () => {
           </ImageWrapper>
         </Link>
         <nav>
-          <StyledNavLink to="/" className={isHomePage ? "home-page" : ""}>
-            Home
-          </StyledNavLink>
-          <StyledNavLink to="/svg" className={isHomePage ? "home-page" : ""}>
-            SVG Components
-          </StyledNavLink>
-          <StyledNavLink
-            to="/feedback"
-            className={isHomePage ? "home-page" : ""}
-          >
-            Feedback
-          </StyledNavLink>
+          <NavLinksWrapper>
+            <StyledNavLink to="/" className={isHomePage ? "home-page" : ""}>
+              Home
+            </StyledNavLink>
+            <StyledNavLink
+              to="/icons"
+              className={isHomePage ? "home-page" : ""}
+            >
+              Icons
+            </StyledNavLink>
+            <StyledNavLink to="/docs" className={isHomePage ? "home-page" : ""}>
+              Docs
+            </StyledNavLink>
+          </NavLinksWrapper>
+
+          <FeedbackContainer>
+            <StyledNavLink
+              to="/feedback"
+              className={
+                isHomePage ? "home-page feedback-link" : "feedback-link"
+              }
+            >
+              Feedback
+            </StyledNavLink>
+          </FeedbackContainer>
         </nav>
       </DesktopHeader>
-      <MobileHeader>
+
+      <MobileHeader className={isOpen ? "open" : ""}>
         <Link to="/">
           <ImageWrapper>
             <StyledImage src={logo} alt="" />
           </ImageWrapper>
         </Link>
-        {isOpen ? (
+
+        {isOpen && (
           <nav>
-            <StyledNavLink to="/">Home</StyledNavLink>
-            <StyledNavLink to="/svg">SVG Components</StyledNavLink>
-            <StyledNavLink to="/feedback">Feedback</StyledNavLink>
+            <MobileNavLinksWrapper>
+              <StyledNavLink to="/">Home</StyledNavLink>
+              <StyledNavLink to="/svg">SVG Components</StyledNavLink>
+              <StyledNavLink
+                to="/feedback"
+                className={`feedback-link ${isHomePage ? "home-page" : ""}`}
+              >
+                Feedback
+              </StyledNavLink>
+            </MobileNavLinksWrapper>
           </nav>
-        ) : null}
+        )}
+
         <Container className={isOpen ? "open" : ""} onClick={handleClick}>
           <div className="bar1"></div>
           <div className="bar2"></div>
@@ -61,72 +86,55 @@ const Header = () => {
 
 export default Header;
 
-const Container = styled.div`
+const NavLinksWrapper = styled.div`
+  display: flex;
+  gap: 40px;
+  flex: 1;
+  justify-content: center;
+`;
+
+const MobileNavLinksWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+`;
+
+const DesktopHeader = styled.header`
+  padding: 8px 50px 8px 80px;
+  text-align: center;
+  display: none;
+  background-color: #18122a;
   justify-content: space-between;
   align-items: center;
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 10px;
+  width: 1440px;
+  height: 136px;
+  position: relative;
 
-  .bar1,
-  .bar2,
-  .bar3 {
+  nav {
+    display: flex;
+    align-items: center;
+    color: #c4c4c4;
     width: 100%;
-    height: 4px;
-    background: #000;
-    margin-bottom: 5px;
-    transition: transform 0.3s;
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 20px;
   }
-  &.open {
-    .bar1 {
-      transform: translate(0, 11px) rotate(-45deg);
-    }
-    .bar2 {
-      opacity: 0;
-    }
-    .bar3 {
-      transform: translate(0, -11px) rotate(45deg);
-    }
+
+  @media (min-width: 768px) {
+    display: flex;
   }
 `;
 
-const StyledNavLink = styled(NavLink)`
-  color: black;
-  margin-right: 20px;
-  padding: 5px 10px;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 22px;
-  position: relative;
-  &.active {
-    color: #2765d8;
-  }
-  &.active:hover:after {
-    color: #2765d8;
-    width: 0;
-    left: 0;
-  }
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background-color: #2765d8;
-    transition: width 0.3s, left 0.3s;
-  }
-  &:hover {
-    color: #2765d8;
-  }
-  &:hover:after {
-    width: 100%;
-    left: 0;
-  }
+const FeedbackContainer = styled.div`
+  width: 153px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+  border-radius: 20px;
+  margin-left: auto;
 `;
 
 const ImageWrapper = styled.div`
@@ -176,20 +184,34 @@ const StyledImage = styled.img`
   width: 100%;
   height: 100%;
 `;
-const DesktopHeader = styled.header`
-  padding: 8px 50px 8px 80px;
-  text-align: center;
-  display: none;
-  background-color: transparent;
-  justify-content: space-between;
-  background-color: #18122a;
+
+const StyledNavLink = styled(NavLink)`
+  color: inherit;
+  padding: 5px 10px;
+  font-size: 22px;
+  text-decoration: none;
+  display: inline-flex;
   align-items: center;
-  width: 1440;
-  height: 136px;
-  @media (min-width: 768px) {
-    display: flex;
+  justify-content: center;
+
+  &.active {
+    color: #2765d8;
+  }
+  &:hover {
+    color: #2765d8;
+  }
+
+  &.feedback-link {
+    font-weight: normal;
+    color: #fff;
+    margin: 0;
+  }
+
+  &:not(.feedback-link) {
+    margin-right: 0;
   }
 `;
+
 const MobileHeader = styled.header`
   text-align: center;
   display: flex;
@@ -202,42 +224,44 @@ const MobileHeader = styled.header`
   nav {
     width: 100%;
     background-color: white;
-    display: flex;
-    flex-direction: column;
     position: absolute;
     top: 96px;
     left: 0;
-    transition: opacity 0.3s;
-    opacity: 0;
-    transform: translateY(-100%);
-    transition: transform 0.5s, opacity 0.3s;
-    animation: appear 0.5s forwards;
     z-index: 1000;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
-  &.open nav {
-    transform: translateY(0);
-    opacity: 1;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 10px;
+
+  .bar1,
+  .bar2,
+  .bar3 {
+    width: 100%;
+    height: 4px;
+    background: #000;
+    margin-bottom: 5px;
+    transition: transform 0.3s;
   }
-  nav a {
-    border-bottom: 1px solid #2765d8;
-    text-align: right;
-    padding: 8px 0px;
-    width: 90%;
-    margin: auto;
-    z-index: 10;
-    font-size: 20px;
-  }
-  nav a:hover:after {
-    width: 0;
-  }
-  @keyframes appear {
-    0% {
-      opacity: 0;
-      transform: translateY(-100%);
+  &.open {
+    .bar1 {
+      transform: translate(0, 11px) rotate(-45deg);
     }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
+    .bar2 {
+      opacity: 0;
+    }
+    .bar3 {
+      transform: translate(0, -11px) rotate(45deg);
     }
   }
 `;
