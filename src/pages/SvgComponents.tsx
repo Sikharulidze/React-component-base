@@ -34,18 +34,28 @@ const SvgComponents = () => {
 
   return (
     <Main>
-      
-      <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
-
-      <ContentWrapper>
-        <InnerContainer>
-          <BoxGrid>
-            {Array.from({ length: 21 }).map((_, i) => (
-              <StyledBox key={i} />
-            ))}
-          </BoxGrid>
-        </InnerContainer>
-      </ContentWrapper>
+      <FilterWrapper>
+        <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
+        <FilterBox>Filter</FilterBox>
+      </FilterWrapper>
+      {searchTerm.length > 0 && (
+        <DisplayBox>
+          {filteredComponents.length > 0 ? (
+            filteredComponents.map((component) => (
+              <ImageBox
+                key={component.id}
+                onClick={() => handleSvgClick(component.id)}
+              >
+                <ImageElement
+                  src={import.meta.env.VITE_API_URL + component.image}
+                />
+              </ImageBox>
+            ))
+          ) : (
+            <p>No matching results</p>
+          )}
+        </DisplayBox>
+      )}
     </Main>
   );
 };
@@ -54,46 +64,69 @@ export default SvgComponents;
 
 const Main = styled.div`
   width: 100%;
+  min-height: 100vh;
+  background-color: #18122a;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start; 
   align-items: center;
-  background-color: #18122a;
+ 
 `;
 
-const ContentWrapper = styled.div`
+
+const DisplayBox = styled.div`
   width: 100%;
-  padding: 24px 0;
+  padding: 24px;
   display: flex;
   justify-content: center;
-  box-sizing: border-box;
-  margin-top: 80px;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  max-width: 1240px;
-`;
-
-const BoxGrid = styled.div`
-  display: flex;
+  gap: 20px;
   flex-wrap: wrap;
-  gap: 31px;
-  max-width: 1240px;
+`;
+
+const ImageBox = styled.div`
+  width: 60px;
+  height: 60px;
+  border: 1px solid gray;
+  padding: 15px;
+  border-radius: 15px;
+`;
+
+const ImageElement = styled.img`
   width: 100%;
-  justify-content: flex-start;
-  box-sizing: border-box;
 `;
 
-const StyledBox = styled.div`
-  width: 150px;
-  height: 150px;
-  border-radius: 10px;
-  border: 3px solid;
-  border-image-slice: 1;
-  border-image-source: linear-gradient(135deg, #932eff, #2973ff);
-  background-color: transparent;
+const FilterWrapper = styled.div`
+  width: 100%;
+  max-width: 1270px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding: 0 20px;
   box-sizing: border-box;
-  flex-shrink: 0;
-  flex-basis: 150px;
+  margin-left: auto;
+  margin-right: auto;
+
+    @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 0 16px;
+  }
 `;
 
+
+const FilterBox = styled.div`
+  background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+  color: #ffffff;
+  font-size: 18px;
+  border-radius: 15px;
+  user-select: none;
+  cursor: default;
+  width: 108px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+`;

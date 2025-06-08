@@ -1,16 +1,15 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  };
+
+  const handleClick = () => setIsOpen(!isOpen);
+
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
@@ -18,13 +17,30 @@ const Header = () => {
   return (
     <>
       <DesktopHeader>
-        <Link to="/">
-          <ImageWrapper>
-            <StyledImage src={logo} alt="" />
-          </ImageWrapper>
-        </Link>
-        <nav>
-          <NavLinksWrapper>
+        <HeaderInner>
+          <LeftSide>
+            <Link to="/">
+              <LogoContainer>
+                <ImageWrapper>
+                  <StyledImage src={logo} alt="Logo" />
+                </ImageWrapper>
+                <span
+                  style={{
+                    fontSize: "20px",
+                    color: "#FFFFFF",
+                    whiteSpace: "nowrap",
+                    marginLeft: "12px",
+                    userSelect: "none",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  Code Simplify
+                </span>
+              </LogoContainer>
+            </Link>
+          </LeftSide>
+
+          <LinksContainer>
             <StyledNavLink to="/" className={isHomePage ? "home-page" : ""}>
               Home
             </StyledNavLink>
@@ -37,41 +53,41 @@ const Header = () => {
             <StyledNavLink to="/docs" className={isHomePage ? "home-page" : ""}>
               Docs
             </StyledNavLink>
-          </NavLinksWrapper>
+          </LinksContainer>
 
-          <FeedbackContainer>
-            <StyledNavLink
-              to="/feedback"
-              className={
-                isHomePage ? "home-page feedback-link" : "feedback-link"
-              }
-            >
-              Feedback
-            </StyledNavLink>
-          </FeedbackContainer>
-        </nav>
+          <RightSide>
+            <FeedbackContainer>
+              <StyledNavLink
+                to="/feedback"
+                className={
+                  isHomePage ? "home-page feedback-link" : "feedback-link"
+                }
+              >
+                Feedback
+              </StyledNavLink>
+            </FeedbackContainer>
+          </RightSide>
+        </HeaderInner>
       </DesktopHeader>
 
-      <MobileHeader className={isOpen ? "open" : ""}>
+      <MobileHeader>
         <Link to="/">
           <ImageWrapper>
-            <StyledImage src={logo} alt="" />
+            <StyledImage src={logo} alt="Logo" />
           </ImageWrapper>
         </Link>
 
         {isOpen && (
-          <nav>
+          <MobileNav>
             <MobileNavLinksWrapper>
               <StyledNavLink to="/">Home</StyledNavLink>
-              <StyledNavLink to="/svg">SVG Components</StyledNavLink>
-              <StyledNavLink
-                to="/feedback"
-                className={`feedback-link ${isHomePage ? "home-page" : ""}`}
-              >
+              <StyledNavLink to="/icons">Icons</StyledNavLink>
+              <StyledNavLink to="/docs">Docs</StyledNavLink>
+              <StyledNavLink to="/feedback" className="feedback-link">
                 Feedback
               </StyledNavLink>
             </MobileNavLinksWrapper>
-          </nav>
+          </MobileNav>
         )}
 
         <Container className={isOpen ? "open" : ""} onClick={handleClick}>
@@ -86,45 +102,56 @@ const Header = () => {
 
 export default Header;
 
-const NavLinksWrapper = styled.div`
-  display: flex;
-  gap: 40px;
-  flex: 1;
-  justify-content: center;
-`;
-
-const MobileNavLinksWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-`;
+// Styled components
 
 const DesktopHeader = styled.header`
-  padding: 8px 50px 8px 80px;
-  text-align: center;
   display: none;
   background-color: #18122a;
-  justify-content: space-between;
   align-items: center;
-  width: 1440px;
   height: 136px;
-  position: relative;
+  width: 100%;
 
-  nav {
-    display: flex;
-    align-items: center;
-    color: #c4c4c4;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    gap: 20px;
-  }
-
-  @media (min-width: 768px) {
+  @media (min-width: 700px) {
     display: flex;
   }
 `;
+
+const HeaderInner = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  gap: 40px;
+`;
+
+const LeftSide = styled.div`
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-left: 60px;
+`;
+
+const RightSide = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-right: 60px;
+`;
+
+const LinksContainer = styled.nav`
+  width: 327px;
+  height: 80px;
+  background-color: rgba(126, 126, 126, 0.2);
+  border-radius: 14px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 
 const FeedbackContainer = styled.div`
   width: 153px;
@@ -134,102 +161,96 @@ const FeedbackContainer = styled.div`
   align-items: center;
   background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
   border-radius: 20px;
-  margin-left: auto;
 `;
 
 const ImageWrapper = styled.div`
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 80px;
   height: 80px;
   margin-right: 20px;
   border-radius: 50%;
   cursor: pointer;
-  &:after {
-    content: "Code Simplify";
-    position: absolute;
-    top: 0;
-    font-size: 20px;
-    left: 100%;
-    width: fit-content;
-    height: 100%;
-    color: transparent;
-    background: linear-gradient(to right, #439cfb, #f187fb);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    font-weight: 900;
-    white-space: nowrap;
-    transition: opacity 0.3s, left 0.3s;
-  }
+
   &:hover:after {
     opacity: 1;
-    left: 110%;
   }
-  @media (min-width: 600px) {
+
+  @media (min-width: 390px) {
     &:after {
       font-size: 30px;
-      left: 50%;
-    }
-    &:hover:after {
-      left: 120%;
     }
   }
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 `;
 
 const StyledImage = styled.img`
   width: 100%;
   height: 100%;
 `;
-
-const StyledNavLink = styled(NavLink)`
-  color: inherit;
-  padding: 5px 10px;
-  font-size: 22px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  &.active {
-    color: #2765d8;
-  }
-  &:hover {
-    color: #2765d8;
-  }
-
-  &.feedback-link {
-    font-weight: normal;
-    color: #fff;
-    margin: 0;
-  }
-
-  &:not(.feedback-link) {
-    margin-right: 0;
-  }
-`;
-
 const MobileHeader = styled.header`
+  width: 100%; 
+  max-width: 390px; 
+  background-color: #18122a;
   text-align: center;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
-  @media screen and (min-width: 768px) {
+  padding: 8px 16px; 
+
+  @media screen and (min-width: 390px) {
     display: none;
   }
-  nav {
-    width: 100%;
-    background-color: white;
-    position: absolute;
-    top: 96px;
-    left: 0;
-    z-index: 1000;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+`;
+
+const MobileNav = styled.nav`
+  position: absolute;
+  top: 60px; 
+  left: 0;
+  width: 100%;
+  background-color: #2c2546;
+  padding: 20px 0;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+const MobileNavLinksWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledNavLink = styled(NavLink)`
+  color: #e0e0e0;
+  font-size: 24px; 
+  text-decoration: none;
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+
+  &.feedback-link {
+    font-weight: 700;
+    background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+    border-radius: 14px;
+    padding: 12px 0;
+    margin: 0 16px;
+    color: white;
+  }
+
+  &:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
   }
 `;
 
@@ -238,30 +259,32 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 40px; 
+  height: 30px;
   background-color: transparent;
   cursor: pointer;
-  padding: 10px;
+  padding: 5px;
 
   .bar1,
   .bar2,
   .bar3 {
     width: 100%;
-    height: 4px;
-    background: #000;
+    height: 3px;
+    background: #fff;
     margin-bottom: 5px;
-    transition: transform 0.3s;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
-  &.open {
-    .bar1 {
-      transform: translate(0, 11px) rotate(-45deg);
-    }
-    .bar2 {
-      opacity: 0;
-    }
-    .bar3 {
-      transform: translate(0, -11px) rotate(45deg);
-    }
+
+  &.open .bar1 {
+    transform: translateY(9px) rotate(-45deg);
+  }
+
+  &.open .bar2 {
+    opacity: 0;
+  }
+
+  &.open .bar3 {
+    transform: translateY(-9px) rotate(45deg);
   }
 `;
