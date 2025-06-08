@@ -16,6 +16,7 @@ const Header = () => {
 
   return (
     <>
+      {/* Desktop Header */}
       <DesktopHeader>
         <HeaderInner>
           <LeftSide>
@@ -70,31 +71,28 @@ const Header = () => {
         </HeaderInner>
       </DesktopHeader>
 
+      {/* Mobile Header */}
       <MobileHeader>
-        <Link to="/">
-          <ImageWrapper>
-            <StyledImage src={logo} alt="Logo" />
-          </ImageWrapper>
-        </Link>
+        <LogoWrapper>
+          <StyledImage src={logo} alt="Logo" />
+        </LogoWrapper>
 
-        {isOpen && (
-          <MobileNav>
-            <MobileNavLinksWrapper>
-              <StyledNavLink to="/">Home</StyledNavLink>
-              <StyledNavLink to="/icons">Icons</StyledNavLink>
-              <StyledNavLink to="/docs">Docs</StyledNavLink>
-              <StyledNavLink to="/feedback" className="feedback-link">
-                Feedback
-              </StyledNavLink>
-            </MobileNavLinksWrapper>
-          </MobileNav>
-        )}
+        <MobileNavLinksWrapper>
+  <NavGroup>
+    <StyledNavLink to="/">Home</StyledNavLink>
+    <StyledNavLink to="/icons">Icons</StyledNavLink>
+    <StyledNavLink to="/docs">Docs</StyledNavLink>
+  </NavGroup>
+  
+   <MobileFeedbackButton to="/feedback" aria-label="Feedback">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="5.5" width="20" height="2" rx="1" fill="white"/>
+        <rect x="12" y="16.5" width="10" height="2" rx="1" fill="white"/>
+        <rect x="-2" y="-5.5" width="10" height="2" rx="1" fill="white" transform="translate(10 10)" />
+      </svg>
+    </MobileFeedbackButton>
+</MobileNavLinksWrapper>
 
-        <Container className={isOpen ? "open" : ""} onClick={handleClick}>
-          <div className="bar1"></div>
-          <div className="bar2"></div>
-          <div className="bar3"></div>
-        </Container>
       </MobileHeader>
     </>
   );
@@ -111,7 +109,7 @@ const DesktopHeader = styled.header`
   height: 136px;
   width: 100%;
 
-  @media (min-width: 700px) {
+  @media (min-width: 768px) {
     display: flex;
   }
 `;
@@ -152,7 +150,6 @@ const LinksContainer = styled.nav`
   align-items: center;
 `;
 
-
 const FeedbackContainer = styled.div`
   width: 153px;
   height: 80px;
@@ -190,101 +187,97 @@ const LogoContainer = styled.div`
   cursor: pointer;
 `;
 
+const LogoWrapper = styled.div`
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+`;
+
 const StyledImage = styled.img`
   width: 100%;
   height: 100%;
 `;
-const MobileHeader = styled.header`
-  width: 100%; 
-  max-width: 390px; 
-  background-color: #18122a;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px; 
 
-  @media screen and (min-width: 390px) {
+const MobileHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  background-color: #18122a;
+  width: 100%;
+
+  @media (min-width: 768px) {
     display: none;
   }
 `;
 
-const MobileNav = styled.nav`
-  position: absolute;
-  top: 60px; 
-  left: 0;
-  width: 100%;
-  background-color: #2c2546;
-  padding: 20px 0;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`;
-
 const MobileNavLinksWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
   align-items: center;
+  width: 100%;
+  width: 80%;
+  height: 56px;
 `;
 
+const NavGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 279px;
+  height: 56px;
+  gap: 8px;
+`;
+
+
 const StyledNavLink = styled(NavLink)`
+  font-size: 16px;
   color: #e0e0e0;
-  font-size: 24px; 
   text-decoration: none;
-  padding: 10px 0;
-  width: 100%;
-  text-align: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
+  transition: all 0.3s;
 
   &.feedback-link {
-    font-weight: 700;
     background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
-    border-radius: 14px;
-    padding: 12px 0;
-    margin: 0 16px;
     color: white;
+    font-weight: 600;
   }
 
   &:hover {
-    color: #fff;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    color: white;
   }
+  
 `;
 
-const Container = styled.div`
+const MobileFeedbackButton = styled(NavLink)`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 40px; 
-  height: 30px;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 5px;
+  padding: 16px;
+  width: 58px;
+  height: 56px;
+  gap: 2px;
 
-  .bar1,
-  .bar2,
-  .bar3 {
-    width: 100%;
-    height: 3px;
-    background: #fff;
-    margin-bottom: 5px;
-    border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+  background: linear-gradient(96.24deg, #2973FF 5.86%, #932EFF 77.64%);
+  border-radius: 14px;
+
+  @media (min-width: 768px) {
+    display: none;
   }
 
-  &.open .bar1 {
-    transform: translateY(9px) rotate(-45deg);
-  }
-
-  &.open .bar2 {
-    opacity: 0;
-  }
-
-  &.open .bar3 {
-    transform: translateY(-9px) rotate(45deg);
+  svg {
+    width: 24px;
+    height: 24px;
   }
 `;
+
