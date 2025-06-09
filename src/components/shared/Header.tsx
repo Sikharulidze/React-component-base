@@ -119,22 +119,11 @@ const Header = () => {
               </svg>
             </MobileFeedbackButton>
           </MobileNavLinksWrapper>
-          <MobileFilterButton aria-label="Filter">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 6H20M7 12H17M10 18H14"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </MobileFilterButton>
+        
         </MobileHeader>
+        
       </MobileViewport>
+      
     </>
   );
 };
@@ -323,38 +312,6 @@ const MobileFeedbackButton = styled(NavLink)`
 
   background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
   border-radius: 14px;
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-`;
-
-const MobileFilterButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  gap: 2px;
-
-  margin: 0 auto;
-  width: 56px;
-  height: 56px;
-
-  background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
-  border-radius: 14px;
-
-  flex: none;
-  order: 1;
-  flex-grow: 0;
-
-  border: none;
-  cursor: pointer;
 
   @media (min-width: 768px) {
     display: none;

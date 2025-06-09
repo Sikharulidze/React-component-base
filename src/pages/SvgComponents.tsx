@@ -35,8 +35,39 @@ const SvgComponents = () => {
   return (
     <Main>
       <FilterWrapper>
+        <SearchBarWrapper>
         <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
+        </SearchBarWrapper>
+        <MobileSearchButton aria-label="Search">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm7.707 13.293-2.828-2.829"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+</MobileSearchButton>
         <FilterBox>Filter</FilterBox>
+        <MobileFilterButton aria-label="Filter">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 6H20M7 12H17M10 18H14"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </MobileFilterButton>
       </FilterWrapper>
       {searchTerm.length > 0 && (
         <DisplayBox>
@@ -68,11 +99,9 @@ const Main = styled.div`
   background-color: #18122a;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: center;
- 
 `;
-
 
 const DisplayBox = styled.div`
   width: 100%;
@@ -107,11 +136,22 @@ const FilterWrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
 
-    @media (max-width: 600px) {
+  @media (max-width: 600px) {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
     padding: 0 16px;
+  }
+`;
+const SearchBarWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+  
+
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 
@@ -129,4 +169,67 @@ const FilterBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: auto;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const MobileSearchButton = styled.button`
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    gap: 2px;
+    margin: 0 auto;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(96.24deg, #2973FF 5.86%, #932EFF 77.64%);
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+`;
+
+
+
+const MobileFilterButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 2px;
+
+  margin: 0 auto;
+  width: 56px;
+  height: 56px;
+
+  background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
+  border-radius: 14px;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+
+  border: none;
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
