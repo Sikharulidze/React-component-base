@@ -119,11 +119,8 @@ const Header = () => {
               </svg>
             </MobileFeedbackButton>
           </MobileNavLinksWrapper>
-        
         </MobileHeader>
-        
       </MobileViewport>
-      
     </>
   );
 };
@@ -168,16 +165,16 @@ const RightSide = styled.div`
   align-items: center;
   padding-right: 60px;
 `;
-
 const LinksContainer = styled.nav`
-  width: 327px;
-  height: 80px;
+ width: 270px; 
+  height: 60px;
   background-color: rgba(126, 126, 126, 0.2);
   border-radius: 14px;
-
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+
 `;
 
 const FeedbackContainer = styled.div`

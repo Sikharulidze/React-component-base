@@ -3,18 +3,25 @@ import useSvgComponents from "../store/useSvgComponents";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
+
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
-
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
+  const toggleFilterDropdown = () => {
+    setShowFilterDropdown((prev) => !prev);
+  };
+
   useEffect(() => {
     fetchSvgComponents();
-  }, []);
+  }, [fetchSvgComponents]);
+
   const handleSvgClick = (id: string) => {
     navigate(`/svg/${id}`);
   };
@@ -35,40 +42,86 @@ const SvgComponents = () => {
   return (
     <Main>
       <FilterWrapper>
-        <SearchBarWrapper>
-        <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
-        </SearchBarWrapper>
-        <MobileSearchButton aria-label="Search">
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm7.707 13.293-2.828-2.829"
-      stroke="white"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-</MobileSearchButton>
-        <FilterBox>Filter</FilterBox>
-        <MobileFilterButton aria-label="Filter">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 6H20M7 12H17M10 18H14"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </MobileFilterButton>
+        <DesktopSearchAndFilter>
+          <SearchBarWrapper>
+            <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
+          </SearchBarWrapper>
+
+          <FilterBoxWrapper>
+            <FilterBox
+              onClick={toggleFilterDropdown}
+              role="button"
+              tabIndex={0}
+            >
+              Filter
+            </FilterBox>
+
+            {showFilterDropdown && (
+              <FilterDropdown>
+                <FilterTitle>Choose by category</FilterTitle>
+                <FilterRowsContainer>
+                  <FilterRow>
+                    <FilterItem type="button">Interface & UI</FilterItem>
+                    <FilterItem type="button">Web & Communication</FilterItem>
+                  </FilterRow>
+                  <FilterRow>
+                    <FilterItem type="button">People & Society</FilterItem>
+                    <FilterItem type="button">Education & Science</FilterItem>
+                  </FilterRow>
+                  <FilterRow>
+                    <FilterItem type="button">Health & Safety</FilterItem>
+                    <FilterItem type="button">Business & Work</FilterItem>
+                  </FilterRow>
+                  <FilterRow>
+                    <FilterItem type="button">Industry & Technology</FilterItem>
+                    <FilterItem type="button">Travel & Transport</FilterItem>
+                  </FilterRow>
+                  <FilterRow>
+                    <FilterItem type="button">Culture & Lifestyle</FilterItem>
+                    <FilterItem type="button">
+                      Nature & Entertainment
+                    </FilterItem>
+                  </FilterRow>
+                </FilterRowsContainer>
+              </FilterDropdown>
+            )}
+          </FilterBoxWrapper>
+        </DesktopSearchAndFilter>
+
+        <MobileActionsWrapper>
+          <MobileSearchButton aria-label="Search">
+            <svg
+              viewBox="0 0 24 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm12.707 19.293-6.242-6.244"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </MobileSearchButton>
+
+          <MobileFilterButton aria-label="Filter">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 6H20M7 12H17M10 18H14"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </MobileFilterButton>
+        </MobileActionsWrapper>
       </FilterWrapper>
+
       {searchTerm.length > 0 && (
         <DisplayBox>
           {filteredComponents.length > 0 ? (
@@ -92,6 +145,8 @@ const SvgComponents = () => {
 };
 
 export default SvgComponents;
+
+// Styled Components
 
 const Main = styled.div`
   width: 100%;
@@ -118,6 +173,7 @@ const ImageBox = styled.div`
   border: 1px solid gray;
   padding: 15px;
   border-radius: 15px;
+  cursor: pointer;
 `;
 
 const ImageElement = styled.img`
@@ -128,9 +184,9 @@ const FilterWrapper = styled.div`
   width: 100%;
   max-width: 1270px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 120px;
   padding: 0 20px;
   box-sizing: border-box;
   margin-left: auto;
@@ -143,18 +199,34 @@ const FilterWrapper = styled.div`
     padding: 0 16px;
   }
 `;
-const SearchBarWrapper = styled.div`
-  width: 100%;
+
+const DesktopSearchAndFilter = styled.div`
   display: flex;
-  justify-content: center;
-  
-  
+  align-items: center;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+
+  & > *:not(:first-child) {
+    margin-left: 177px;
+  }
+`;
+
+const SearchBarWrapper = styled.div`
+  width: 670px;
+`;
+
+const FilterBoxWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 
   @media (max-width: 767px) {
     display: none;
   }
 `;
-
 
 const FilterBox = styled.div`
   background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
@@ -162,16 +234,86 @@ const FilterBox = styled.div`
   font-size: 18px;
   border-radius: 15px;
   user-select: none;
-  cursor: default;
+  cursor: pointer;
   width: 108px;
   height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: auto;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const FilterDropdown = styled.div`
+  position: absolute;
+  top: 80px;
+  right: 0;
+  width: 607px;
+  height: 449px;
+  background-color: #29253e;
+  padding: 20px;
+  border-radius: 15px;
+  color: white;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+`;
+
+const FilterTitle = styled.h3`
+  margin-bottom: 24px;
+  font-size: 20px;
+  text-align: center;
+`;
+
+const FilterRowsContainer = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const FilterRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
+const FilterItem = styled.button`
+  width: 48%;
+  background-color: #3a3570;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+  color: white;
+  font-family: inherit;
+  transition: background 0.3s ease;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+  }
+`;
+
+const MobileActionsWrapper = styled.div`
+  display: none;
 
   @media (max-width: 767px) {
-    display: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1270px;
+    padding: 0 5px;
+    margin-top: 16px;
   }
 `;
 
@@ -180,15 +322,12 @@ const MobileSearchButton = styled.button`
 
   @media (max-width: 767px) {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 16px;
-    gap: 2px;
-    margin: 0 auto;
     width: 56px;
     height: 56px;
-    background: linear-gradient(96.24deg, #2973FF 5.86%, #932EFF 77.64%);
+    background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
     border-radius: 14px;
     border: none;
     cursor: pointer;
@@ -200,36 +339,24 @@ const MobileSearchButton = styled.button`
   }
 `;
 
-
-
 const MobileFilterButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  gap: 2px;
+  display: none;
 
-  margin: 0 auto;
-  width: 56px;
-  height: 56px;
+  @media (max-width: 767px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
 
-  background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
-  border-radius: 14px;
-
-  flex: none;
-  order: 1;
-  flex-grow: 0;
-
-  border: none;
-  cursor: pointer;
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 `;
