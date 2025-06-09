@@ -72,28 +72,69 @@ const Header = () => {
       </DesktopHeader>
 
       {/* Mobile Header */}
-      <MobileHeader>
-        <LogoWrapper>
-          <StyledImage src={logo} alt="Logo" />
-        </LogoWrapper>
+      <MobileViewport>
+        <MobileHeader>
+          <LogoWrapper>
+            <StyledImage src={logo} alt="Logo" />
+          </LogoWrapper>
 
-        <MobileNavLinksWrapper>
-  <NavGroup>
-    <StyledNavLink to="/">Home</StyledNavLink>
-    <StyledNavLink to="/icons">Icons</StyledNavLink>
-    <StyledNavLink to="/docs">Docs</StyledNavLink>
-  </NavGroup>
-  
-   <MobileFeedbackButton to="/feedback" aria-label="Feedback">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="5.5" width="20" height="2" rx="1" fill="white"/>
-        <rect x="12" y="16.5" width="10" height="2" rx="1" fill="white"/>
-        <rect x="-2" y="-5.5" width="10" height="2" rx="1" fill="white" transform="translate(10 10)" />
-      </svg>
-    </MobileFeedbackButton>
-</MobileNavLinksWrapper>
+          <MobileNavLinksWrapper>
+            <NavGroup>
+              <StyledNavLink to="/">Home</StyledNavLink>
+              <StyledNavLink to="/icons">Icons</StyledNavLink>
+              <StyledNavLink to="/docs">Docs</StyledNavLink>
+            </NavGroup>
 
-      </MobileHeader>
+            <MobileFeedbackButton to="/feedback" aria-label="Feedback">
+              <svg
+                viewBox="0 0 28 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="2"
+                  y="10.5"
+                  width="23"
+                  height="2"
+                  rx="1"
+                  fill="white"
+                />
+                <rect
+                  x="15"
+                  y="21.5"
+                  width="10"
+                  height="2"
+                  rx="1"
+                  fill="white"
+                />
+                <rect
+                  x="-10"
+                  y="-9.5"
+                  width="10"
+                  height="2"
+                  rx="1"
+                  fill="white"
+                  transform="translate(10 10)"
+                />
+              </svg>
+            </MobileFeedbackButton>
+          </MobileNavLinksWrapper>
+          <MobileFilterButton aria-label="Filter">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 6H20M7 12H17M10 18H14"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </MobileFilterButton>
+        </MobileHeader>
+      </MobileViewport>
     </>
   );
 };
@@ -211,6 +252,18 @@ const MobileHeader = styled.header`
   padding: 20px 0;
   background-color: #18122a;
   width: 100%;
+  height: 158px;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+const MobileViewport = styled.div`
+  width: 390px;
+  height: auto;
+  margin: 0 auto;
+  background-color: #18122a;
+  overflow-x: hidden;
 
   @media (min-width: 768px) {
     display: none;
@@ -219,11 +272,10 @@ const MobileHeader = styled.header`
 
 const MobileNavLinksWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   align-items: center;
   width: 100%;
-  width: 80%;
   height: 56px;
 `;
 
@@ -233,8 +285,11 @@ const NavGroup = styled.div`
   width: 279px;
   height: 56px;
   gap: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 0 8px;
+  align-items: center;
 `;
-
 
 const StyledNavLink = styled(NavLink)`
   font-size: 16px;
@@ -242,7 +297,6 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   padding: 10px 16px;
   border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.05);
   white-space: nowrap;
   transition: all 0.3s;
 
@@ -256,7 +310,6 @@ const StyledNavLink = styled(NavLink)`
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
   }
-  
 `;
 
 const MobileFeedbackButton = styled(NavLink)`
@@ -268,7 +321,7 @@ const MobileFeedbackButton = styled(NavLink)`
   height: 56px;
   gap: 2px;
 
-  background: linear-gradient(96.24deg, #2973FF 5.86%, #932EFF 77.64%);
+  background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
   border-radius: 14px;
 
   @media (min-width: 768px) {
@@ -281,3 +334,34 @@ const MobileFeedbackButton = styled(NavLink)`
   }
 `;
 
+const MobileFilterButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 2px;
+
+  margin: 0 auto;
+  width: 56px;
+  height: 56px;
+
+  background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
+  border-radius: 14px;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+
+  border: none;
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
