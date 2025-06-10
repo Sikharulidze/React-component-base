@@ -8,15 +8,13 @@ const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const toggleFilterDropdown = () => {
-    setShowFilterDropdown((prev) => !prev);
-  };
+  const handleClick = () => setIsOpen(!isOpen);
 
   useEffect(() => {
     fetchSvgComponents();
@@ -48,18 +46,16 @@ const SvgComponents = () => {
           </SearchBarWrapper>
 
           <FilterBoxWrapper>
-            <FilterBox
-              onClick={toggleFilterDropdown}
-              role="button"
-              tabIndex={0}
-            >
+            <FilterBox onClick={handleClick} role="button" tabIndex={0}>
               Filter
             </FilterBox>
 
-            {showFilterDropdown && (
+            {isOpen && (
               <FilterDropdown>
-                <FilterTitle>Choose by category</FilterTitle>
                 <FilterRowsContainer>
+                  <FilterTitle>
+                    Choose by <span>Category</span>
+                  </FilterTitle>
                   <FilterRow>
                     <FilterItem type="button">Interface & UI</FilterItem>
                     <FilterItem type="button">Web & Communication</FilterItem>
@@ -87,39 +83,6 @@ const SvgComponents = () => {
             )}
           </FilterBoxWrapper>
         </DesktopSearchAndFilter>
-
-        <MobileActionsWrapper>
-          <MobileSearchButton aria-label="Search">
-            <svg
-              viewBox="0 0 24 30"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm12.707 19.293-6.242-6.244"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </MobileSearchButton>
-
-          <MobileFilterButton aria-label="Filter">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 6H20M7 12H17M10 18H14"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </MobileFilterButton>
-        </MobileActionsWrapper>
       </FilterWrapper>
 
       {searchTerm.length > 0 && (
@@ -245,61 +208,93 @@ const FilterBox = styled.div`
     outline: none;
   }
 `;
-
 const FilterDropdown = styled.div`
-  position: absolute;
-  top: 80px;
+  position: fixed;
+  top: 0;
   right: 0;
-  width: 607px;
-  height: 449px;
+  width: 707px;
+  height: 100vh;
   background-color: #29253e;
   padding: 20px;
-  border-radius: 15px;
   color: white;
-  z-index: 1000;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  justify-content: center;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  animation: slideIn 0.3s ease forwards;
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
 `;
 
 const FilterTitle = styled.h3`
-  margin-bottom: 24px;
-  font-size: 20px;
+  margin-bottom: 10px;
+  font-size: 40px;
   text-align: center;
+
+  span {
+    color: #932eff;
+  }
 `;
 
 const FilterRowsContainer = styled.div`
-  flex-grow: 1;
+  gap: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  
 `;
 
 const FilterRow = styled.div`
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: center;
+  gap: 20px;
 `;
 
 const FilterItem = styled.button`
-  width: 48%;
-  background-color: #3a3570;
-  padding: 12px 16px;
+  position: relative;
+  padding: 0 30px;
+  white-space: nowrap;
+  width: fit-content;
+  height: 60px;
   border-radius: 10px;
-  border: none;
-  text-align: center;
+  background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+  color: white;
   cursor: pointer;
   user-select: none;
-  font-weight: 500;
-  color: white;
-  font-family: inherit;
-  transition: background 0.3s ease;
+  text-align: center;
+  border: none;
+  z-index: 0;
+  font-size: 20px;
+  
+  
 
-  &:hover,
+  &::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background-color: #29253e;
+    border-radius: 8px;
+    z-index: -1;
+  }
+
+  &:hover::before {
+    background-color: #1f1c33;
+  }
+
   &:focus {
     outline: none;
-    background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
   }
 `;
 

@@ -14,6 +14,8 @@ const Header = () => {
     setIsOpen(false);
   }, [location]);
 
+
+  
   return (
     <>
       {/* Desktop Header */}
@@ -166,7 +168,7 @@ const RightSide = styled.div`
   padding-right: 60px;
 `;
 const LinksContainer = styled.nav`
- width: 270px; 
+  width: 270px;
   height: 60px;
   background-color: rgba(126, 126, 126, 0.2);
   border-radius: 14px;
@@ -174,7 +176,6 @@ const LinksContainer = styled.nav`
   align-items: center;
   justify-content: center;
   padding: 0 12px;
-
 `;
 
 const FeedbackContainer = styled.div`
