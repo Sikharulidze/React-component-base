@@ -9,6 +9,8 @@ const SvgComponents = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
 
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -31,13 +33,24 @@ const SvgComponents = () => {
       .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }, [searchTerm]);
 
-  const filteredComponents = useMemo(() => {
-    return components.filter((component) =>
-      component.name.toLowerCase().includes(escapedSearchTerm)
-    );
-  }, [components, escapedSearchTerm]);
+const filteredComponents = useMemo(() => {
+  if (!components || components.length === 0) return [];
+
+  return components.filter((component) => {
+    const matchesSearch = component.name.toLowerCase().includes(escapedSearchTerm);
+    const matchesCategory = selectedCategory ? component.category === selectedCategory : true;
+
+    return matchesSearch && matchesCategory;
+  });
+}, [components, escapedSearchTerm, selectedCategory]);
+
+
 
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+console.log("Filtered components:", filteredComponents);
+console.log("Base API URL:", import.meta.env.VITE_API_URL);
+
+
 
   return (
     <Main>
@@ -103,9 +116,12 @@ const SvgComponents = () => {
       )}
       <FilterWrapper>
         <DesktopSearchAndFilter>
+          
           <SearchBarWrapper>
             <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
           </SearchBarWrapper>
+
+         
 
           <FilterBoxWrapper>
             <FilterBox onClick={handleClick} role="button" tabIndex={0}>
@@ -329,24 +345,23 @@ const SvgComponents = () => {
         </DesktopSearchAndFilter>
       </FilterWrapper>
 
-      {searchTerm.length > 0 && (
-        <DisplayBox>
-          {filteredComponents.length > 0 ? (
-            filteredComponents.map((component) => (
-              <ImageBox
-                key={component.id}
-                onClick={() => handleSvgClick(component.id)}
-              >
-                <ImageElement
-                  src={import.meta.env.VITE_API_URL + component.image}
-                />
-              </ImageBox>
-            ))
-          ) : (
-            <p>No matching results</p>
-          )}
-        </DisplayBox>
-      )}
+      {filteredComponents.length > 0 ? (
+      <IconsGrid>
+        {filteredComponents.map((icon) => (
+          <IconCard key={icon.id || icon.name}>
+            <img
+              src={import.meta.env.VITE_API_URL + icon.image}
+              alt={icon.name}
+              width={40}
+              height={40}
+            />
+            <IconLabel>{icon.name}</IconLabel>
+          </IconCard>
+        ))}
+      </IconsGrid>
+    ) : (
+      <p>No matching results</p>
+    )}
     </Main>
   );
 };
@@ -487,6 +502,40 @@ const FilterDropdown = styled.div`
     }
   }
 `;
+
+const IconsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+`;
+
+const IconCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+  }
+`;
+
+const IconLabel = styled.span`
+  font-size: 14px;
+  margin-top: 8px;
+  color: white;
+  text-align: center;
+`;
+
 
 const FilterItemSvg = styled.svg`
   width: 24px;
