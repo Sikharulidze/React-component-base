@@ -12,7 +12,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/svg" element={<SvgComponents />} />
+        <Route path="/icons" element={<SvgComponents />} />
         <Route path="/svg/:id" element={<SvgDetail />} />
         <Route path="/feedback" element={<Feedback />} />
       </Routes>

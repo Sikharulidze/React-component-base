@@ -14,8 +14,6 @@ const Header = () => {
     setIsOpen(false);
   }, [location]);
 
-
-  
   return (
     <>
       {/* Desktop Header */}
@@ -168,8 +166,8 @@ const RightSide = styled.div`
   padding-right: 60px;
 `;
 const LinksContainer = styled.nav`
-  width: 270px;
-  height: 60px;
+  width: 327px;
+  height: 80px;
   background-color: rgba(126, 126, 126, 0.2);
   border-radius: 14px;
   display: flex;
@@ -279,7 +277,7 @@ const NavGroup = styled.div`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  font-size: 16px;
+  font-size: 20px;
   color: #e0e0e0;
   text-decoration: none;
   padding: 10px 16px;

@@ -5,6 +5,7 @@ import MainBackground from "../assets/images/3dBackground.jpg";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   useEffect(() => {
@@ -18,7 +19,7 @@ const Home = () => {
   }, []);
   const navigate = useNavigate();
   const handleNavigateToSvgPage = () => {
-    navigate("/svg");
+    navigate("/icons");
   };
   const handleNavigateToFeedbackPage = () => {
     navigate("/feedback");
