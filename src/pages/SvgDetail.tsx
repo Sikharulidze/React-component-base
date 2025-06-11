@@ -120,6 +120,7 @@ const SvgDetail = () => {
 };
 
 export default SvgDetail;
+
 const DetailSection = styled.div`
   display: flex;
   justify-content: space-between;

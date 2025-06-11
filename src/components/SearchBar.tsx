@@ -69,6 +69,13 @@ const SearchFilterWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+
+  @media (max-width: 767px) {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    height: auto;
+  }
 `;
 
 const SearchBarWrapper = styled.div`
@@ -87,7 +94,7 @@ const StyledInput = styled.input`
   border-radius: 15px;
 
   background-image: linear-gradient(#18122a, #18122a),
-    linear-gradient(135deg, #932eff, #2973ff);
+    linear-gradient(135deg, #2973ff, #932eff);
   background-origin: border-box;
   background-clip: padding-box, border-box;
   background-color: transparent;
@@ -100,6 +107,12 @@ const StyledInput = styled.input`
   &:focus {
     outline: none;
     box-shadow: 0 0 10px rgba(147, 46, 255, 0.5);
+  }
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    padding: 10px;
+    height: 50px;
   }
 `;
 
@@ -115,24 +128,4 @@ const SearchIcon = styled.div`
   justify-content: center;
   align-items: center;
   pointer-events: none;
-`;
-
-const FilterButton = styled.button`
-  width: 270px;
-  height: 100%;
-  font-size: 18px;
-  border: none;
-  border-radius: 15px;
-  background: linear-gradient(135deg, #932eff, #2973ff);
-  color: white;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.9;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(147, 46, 255, 0.5);
-  }
 `;

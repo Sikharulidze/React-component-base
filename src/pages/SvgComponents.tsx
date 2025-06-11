@@ -37,8 +37,70 @@ const SvgComponents = () => {
     );
   }, [components, escapedSearchTerm]);
 
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+
   return (
     <Main>
+      <MobileActionsWrapper>
+        <MobileSearchButton onClick={() => setIsMobileSearchOpen(true)}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </MobileSearchButton>
+
+        <MobileFilterButton onClick={() => setIsFilterOpen(true)}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="4" y1="21" x2="4" y2="14" />
+            <line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" />
+            <line x1="20" y1="12" x2="20" y2="3" />
+          </svg>
+        </MobileFilterButton>
+      </MobileActionsWrapper>
+      {isMobileSearchOpen && (
+        <MobileSearchDropdown>
+          <MobileCloseButton onClick={() => setIsMobileSearchOpen(false)}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </MobileCloseButton>
+
+          <MobileSearchTitle>
+            <span className="highlight">Uncover</span>
+            <span>Something</span>
+            <span className="highlight">Exciting!</span>
+          </MobileSearchTitle>
+
+          <SearchBarWrapper>
+            <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
+          </SearchBarWrapper>
+        </MobileSearchDropdown>
+      )}
       <FilterWrapper>
         <DesktopSearchAndFilter>
           <SearchBarWrapper>
@@ -359,7 +421,14 @@ const DesktopSearchAndFilter = styled.div`
 `;
 
 const SearchBarWrapper = styled.div`
-  width: 670px;
+  width: 100%;
+  max-width: 670px;
+  margin: 0 auto;
+
+  @media (max-width: 767px) {
+    width: 100%;
+    max-width: 320px;
+  }
 `;
 
 const FilterBoxWrapper = styled.div`
@@ -491,7 +560,7 @@ const FilterItem = styled.button`
     top: 2.2px;
     left: 2.2px;
     right: 2.2px;
-    bottom: 2.2px;
+    bottom: 2px;
     background-color: #29253e;
     border-radius: 16px;
     z-index: -1;
@@ -508,16 +577,11 @@ const FilterItem = styled.button`
 
 const MobileActionsWrapper = styled.div`
   display: none;
-
-  @media (max-width: 767px) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1270px;
-    padding: 0 5px;
-    margin-top: 16px;
-  }
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 23px;
+  margin-top: 80px;
 `;
 
 const MobileSearchButton = styled.button`
@@ -528,8 +592,6 @@ const MobileSearchButton = styled.button`
     justify-content: center;
     align-items: center;
     padding: 16px;
-    width: 56px;
-    height: 56px;
     background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
     border-radius: 14px;
     border: none;
@@ -550,8 +612,6 @@ const MobileFilterButton = styled.button`
     justify-content: center;
     align-items: center;
     padding: 16px;
-    width: 56px;
-    height: 56px;
     background: linear-gradient(96.24deg, #2973ff 5.86%, #932eff 77.64%);
     border-radius: 14px;
     border: none;
@@ -561,5 +621,68 @@ const MobileFilterButton = styled.button`
       width: 24px;
       height: 24px;
     }
+  }
+`;
+
+const MobileSearchDropdown = styled.div`
+  position: fixed;
+  margin-top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 90%;
+  background-color: #221a35;
+  border-radius: 15px;
+  padding: 20px;
+  box-sizing: border-box;
+  color: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  animation: dropDown 0.3s ease forwards;
+
+  @keyframes dropDown {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+`;
+
+const MobileSearchTitle = styled.h3`
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: center;
+  margin-top: 10px;
+
+  span {
+    display: block;
+  }
+
+  .highlight {
+    color: #932eff;
+  }
+`;
+
+const MobileCloseButton = styled.button`
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+  padding: 0;
+
+  &:focus {
+    outline: 2px solid #932eff;
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
   }
 `;
