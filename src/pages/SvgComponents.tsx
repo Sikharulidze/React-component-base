@@ -11,7 +11,6 @@ const SvgComponents = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -33,24 +32,24 @@ const SvgComponents = () => {
       .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }, [searchTerm]);
 
-const filteredComponents = useMemo(() => {
-  if (!components || components.length === 0) return [];
+  const filteredComponents = useMemo(() => {
+    if (!components || components.length === 0) return [];
 
-  return components.filter((component) => {
-    const matchesSearch = component.name.toLowerCase().includes(escapedSearchTerm);
-    const matchesCategory = selectedCategory ? component.category === selectedCategory : true;
+    return components.filter((component) => {
+      const matchesSearch = component.name
+        .toLowerCase()
+        .includes(escapedSearchTerm);
+      const matchesCategory = selectedCategory
+        ? component.category === selectedCategory
+        : true;
 
-    return matchesSearch && matchesCategory;
-  });
-}, [components, escapedSearchTerm, selectedCategory]);
-
-
+      return matchesSearch && matchesCategory;
+    });
+  }, [components, escapedSearchTerm, selectedCategory]);
 
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-console.log("Filtered components:", filteredComponents);
-console.log("Base API URL:", import.meta.env.VITE_API_URL);
-
-
+  console.log("Filtered components:", filteredComponents);
+  console.log("Base API URL:", import.meta.env.VITE_API_URL);
 
   return (
     <Main>
@@ -116,12 +115,9 @@ console.log("Base API URL:", import.meta.env.VITE_API_URL);
       )}
       <FilterWrapper>
         <DesktopSearchAndFilter>
-          
           <SearchBarWrapper>
             <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
           </SearchBarWrapper>
-
-         
 
           <FilterBoxWrapper>
             <FilterBox onClick={handleClick} role="button" tabIndex={0}>
@@ -346,22 +342,24 @@ console.log("Base API URL:", import.meta.env.VITE_API_URL);
       </FilterWrapper>
 
       {filteredComponents.length > 0 ? (
-      <IconsGrid>
-        {filteredComponents.map((icon) => (
-          <IconCard key={icon.id || icon.name}>
-            <img
-              src={import.meta.env.VITE_API_URL + icon.image}
-              alt={icon.name}
-              width={40}
-              height={40}
-            />
-            <IconLabel>{icon.name}</IconLabel>
-          </IconCard>
-        ))}
-      </IconsGrid>
-    ) : (
-      <p>No matching results</p>
-    )}
+        <IconsGrid>
+          {filteredComponents.map((icon) => (
+            <IconCard key={icon.id || icon.name}>
+              <IconInner>
+                <img
+                  src={import.meta.env.VITE_API_URL + icon.image}
+                  alt={icon.name}
+                  width={40}
+                  height={40}
+                />
+                <IconLabel>{icon.name}</IconLabel>
+              </IconInner>
+            </IconCard>
+          ))}
+        </IconsGrid>
+      ) : (
+        <p>No matching results</p>
+      )}
     </Main>
   );
 };
@@ -504,22 +502,71 @@ const FilterDropdown = styled.div`
 `;
 
 const IconsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 20px;
+  width: 1240px;
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-left: 30px;
 `;
 
 const IconCard = styled.div`
+  position: relative;
+  flex: 0 0 calc(100% / 7 - 16px);
+  border-radius: 12px;
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    border-radius: 12px;
+
+    background: linear-gradient(to right, #2973ff, #932eff);
+
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
+
+  &:hover {
+    background-color: #13101f;
+
+    span {
+      display: none;
+    }
+  }
+`;
+
+const IconInner = styled.div`
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
+  justify-content: center;
+  padding: 12px 0;
+  background-color: transparent;
 
   img {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
     margin-bottom: 8px;
+    transition: transform 0.6s ease;
+  }
+  ${IconCard}:hover & img {
+    transform: translateY(6px);
   }
 
   p {
@@ -535,7 +582,6 @@ const IconLabel = styled.span`
   color: white;
   text-align: center;
 `;
-
 
 const FilterItemSvg = styled.svg`
   width: 24px;
