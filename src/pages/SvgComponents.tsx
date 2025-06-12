@@ -10,6 +10,10 @@ const SvgComponents = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState<SvgComponentType | null>(
+    null
+  );
+  const [showJS, setShowJS] = useState(true);
 
   const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -48,8 +52,6 @@ const SvgComponents = () => {
   }, [components, escapedSearchTerm, selectedCategory]);
 
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-  console.log("Filtered components:", filteredComponents);
-  console.log("Base API URL:", import.meta.env.VITE_API_URL);
 
   return (
     <Main>
@@ -344,7 +346,12 @@ const SvgComponents = () => {
       {filteredComponents.length > 0 ? (
         <IconsGrid>
           {filteredComponents.map((icon) => (
-            <IconCard key={icon.id || icon.name}>
+            <IconCard
+              key={icon.id || icon.name}
+              onClick={() => navigate(`/svg/${icon.id}`)}
+
+
+            >
               <IconInner>
                 <img
                   src={import.meta.env.VITE_API_URL + icon.image}
@@ -356,6 +363,85 @@ const SvgComponents = () => {
               </IconInner>
             </IconCard>
           ))}
+
+          {selectedIcon && (
+            <div
+              style={{
+                marginTop: "2rem",
+                padding: "2rem",
+                backgroundColor: "white",
+                borderRadius: "16px",
+                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+                border: "1px solid #eee",
+                maxWidth: "800px",
+                marginInline: "auto",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                <img
+                  src={import.meta.env.VITE_API_URL + selectedIcon.image}
+                  alt={selectedIcon.name}
+                  width={80}
+                  height={80}
+                />
+                <h2 style={{ fontSize: "1.5rem" }}>{selectedIcon.name}</h2>
+              </div>
+
+              <p style={{ color: "#444", marginBottom: "1.5rem" }}>
+                {selectedIcon.description ||
+                  `This component renders an SVG icon representing the ${selectedIcon.name} logo.`}
+              </p>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "0.5rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <button>🎨 BgColor</button>
+                <button>🖍️ Color</button>
+                <button>🧱 BorderColor</button>
+                <button>↕️ Size</button>
+                <button>⚙️ OnClick</button>
+              </div>
+
+              <div style={{ marginBottom: "1rem" }}>
+                <button
+                  onClick={() => setShowJS(true)}
+                  style={{ marginRight: "0.5rem" }}
+                >
+                  JavaScript
+                </button>
+                <button onClick={() => setShowJS(false)}>TypeScript</button>
+              </div>
+
+              <pre
+                style={{
+                  background: "#1e1e2f",
+                  color: "#fff",
+                  padding: "1rem",
+                  borderRadius: "8px",
+                  overflowX: "auto",
+                  fontSize: "0.9rem",
+                }}
+              >
+                <code>
+                  {showJS
+                    ? selectedIcon["js-snippet"]
+                    : selectedIcon["ts-snippet"]}
+                </code>
+              </pre>
+            </div>
+          )}
         </IconsGrid>
       ) : (
         <p>No matching results</p>
@@ -507,13 +593,15 @@ const IconsGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 16px;
-  margin-left: 30px;
+  gap: 30px;
+  padding-bottom: 80px;
+  row-gap: 41px;
 `;
 
 const IconCard = styled.div`
   position: relative;
-  flex: 0 0 calc(100% / 7 - 16px);
+  flex: 0 0 calc((1240px - 6 * 41px) / 7);
+  max-width: calc((1240px - 6 * 30px) / 7);
   border-radius: 12px;
   padding: 2px;
   display: flex;
@@ -555,7 +643,6 @@ const IconInner = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px 0;
   background-color: transparent;
 
   img {
