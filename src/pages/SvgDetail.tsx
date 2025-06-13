@@ -12,7 +12,9 @@ const SyntaxHighlighter = lazy(
 const SvgDetail = () => {
   const { id } = useParams();
   const { components, fetchSvgComponents } = useSvgComponents();
+
   const currentSvg = components.find((component) => component.id === id);
+
   const navigate = useNavigate();
   const [language, setLanguage] = useState<"default" | "js" | "ts">("default");
   const [copying, setCopying] = useState(false);
@@ -73,15 +75,13 @@ const SvgDetail = () => {
               />
             </DetailImage>
             <p className="description">{currentSvg.description}</p>
-            <h3>Component Props</h3>
-            <ul>
-              {currentSvg.props.map((prop) => (
-                <Li key={prop.name}>
-                  <span>{prop.name}: </span>
-                  <span>{prop.description}</span>
-                </Li>
-              ))}
-            </ul>
+            <ButtonsWrapper>
+              <PropsButtons>
+                {currentSvg?.props.map((prop) => (
+                  <button key={prop.name}>{prop.name}</button>
+                ))}
+              </PropsButtons>
+            </ButtonsWrapper>
           </DetailContainer>
 
           <RightColumnWrapper>
@@ -197,40 +197,42 @@ const MainDiv = styled.div`
     flex-direction: column;
   }
 `;
-
 const DetailContainer = styled.div`
   width: 522px;
   height: 552px;
   border: 1px solid #2765d8;
   background: #0d0926;
   border-radius: 20px;
-  padding: 52px 30px 30px;
-  overflow-y: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 
   h2 {
     font-size: 40px;
     text-align: center;
-    margin-bottom: 20px;
     color: #2973ff;
     font-weight: 400;
+    margin-bottom: 32px;
   }
 
   p {
     font-size: 20px;
     text-align: center;
+    margin: 0;
   }
 
   p.description {
-    margin: 20px 0;
     color: #ffffff;
   }
 
   h3 {
     font-size: 26px;
     color: #2765d8;
-    margin-top: 40px;
-    margin-bottom: 20px;
     text-align: center;
+    margin: 0;
   }
 
   @media (max-width: 768px) {
@@ -309,7 +311,6 @@ const LeftButtons = styled.div`
     }
   }
 
-  /* These must be outside the button block */
   button.default {
     width: 112px;
     height: 44px;
@@ -355,16 +356,34 @@ const SvgCodeDiv = styled.div`
     font-size: 13px;
   }
 `;
-
-const Li = styled.li`
-  margin-bottom: 10px;
-  font-size: 18px;
+const ButtonsWrapper = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  margin-top: 24px;
+`;
+
+const PropsButtons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
 
-  span:nth-child(1) {
-    font-weight: bold;
-    color: #2765d8;
+  button {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    height: 44px;
+    color: white;
+    background: transparent;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#18122a, #18122a),
+      linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    transition: 0.2s;
+
+    &:hover {
+      background-color: #18122a;
+    }
   }
 `;
