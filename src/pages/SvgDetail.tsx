@@ -11,7 +11,7 @@ const SyntaxHighlighter = lazy(
 
 const SvgDetail = () => {
   const { id } = useParams();
-  const { components } = useSvgComponents();
+  const { components, fetchSvgComponents } = useSvgComponents();
   const currentSvg = components.find((component) => component.id === id);
   const navigate = useNavigate();
   const [language, setLanguage] = useState("default");
@@ -45,11 +45,19 @@ const SvgDetail = () => {
         : currentSvg["ts-snippet"]);
     return code;
   };
+
   useEffect(() => {
-    if (currentSvg === undefined) {
+    if (components.length === 0) {
+      fetchSvgComponents();
+    }
+  }, [components]);
+
+  useEffect(() => {
+    if (components.length > 0 && currentSvg === undefined) {
       navigate("/svg");
     }
-  }, [currentSvg]);
+  }, [components, currentSvg]);
+
   return (
     <>
       <DetailSection>
@@ -105,7 +113,6 @@ const SvgDetail = () => {
                     language={language === "ts" ? "typescript" : "javascript"}
                     style={atomDark}
                   >
-                    
                     {getSyntaxHighlighterCode()}
                   </SyntaxHighlighter>
                 </Suspense>
