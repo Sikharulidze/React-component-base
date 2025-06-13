@@ -14,225 +14,357 @@ const SvgDetail = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
   const currentSvg = components.find((component) => component.id === id);
   const navigate = useNavigate();
-  const [language, setLanguage] = useState("default");
-  const [copying, setCoping] = useState(false);
-  const handleLanguageChange = (lang: string) => {
+  const [language, setLanguage] = useState<"default" | "js" | "ts">("default");
+  const [copying, setCopying] = useState(false);
+
+  const handleLanguageChange = (lang: "default" | "js" | "ts") =>
     setLanguage(lang);
-  };
-  if (!components) {
-    return <div>Loading...</div>;
-  }
-
-  const handleCopyCode = async () => {
-    setCoping(true);
-    const code = getSyntaxHighlighterCode();
-    navigator.clipboard.writeText(code ?? "").then(() => {
-      console.log("Code copied to clipboard");
-    });
-    if (currentSvg) {
-      await copyClickCounter(currentSvg.name);
-      setCoping(false);
-    }
-  };
-
-  const getSyntaxHighlighterCode = () => {
-    const code =
-      currentSvg &&
-      (language === "default"
-        ? currentSvg.base
-        : language === "js"
-        ? currentSvg["js-snippet"]
-        : currentSvg["ts-snippet"]);
-    return code;
-  };
 
   useEffect(() => {
     if (components.length === 0) {
       fetchSvgComponents();
     }
-  }, [components]);
+  }, [components, fetchSvgComponents]);
 
   useEffect(() => {
     if (components.length > 0 && currentSvg === undefined) {
       navigate("/svg");
     }
-  }, [components, currentSvg]);
+  }, [components, currentSvg, navigate]);
+
+  const getSyntaxHighlighterCode = () => {
+    if (!currentSvg) return "";
+    return language === "default"
+      ? currentSvg.base
+      : language === "js"
+      ? currentSvg["js-snippet"]
+      : currentSvg["ts-snippet"];
+  };
+
+  const handleCopyCode = async () => {
+    setCopying(true);
+    const code = getSyntaxHighlighterCode();
+    try {
+      await navigator.clipboard.writeText(code ?? "");
+      console.log("Code copied to clipboard");
+      if (currentSvg) {
+        await copyClickCounter(currentSvg.name);
+      }
+    } catch (error) {
+      console.error("Failed to copy code", error);
+    } finally {
+      setCopying(false);
+    }
+  };
+
+  if (!components) return <div>Loading...</div>;
 
   return (
-    <>
-      <DetailSection>
-        {currentSvg && (
-          <>
-            <DetailContainer>
-              <div>
-                <h2>{currentSvg.name}</h2>
-                <DetailImage>
-                  <img
-                    style={{ width: "100%" }}
-                    src={import.meta.env.VITE_API_URL + currentSvg.image}
-                    alt={currentSvg.name}
-                  />
-                </DetailImage>
-                <p className="description">{currentSvg.description}</p>
-                <h3>Component Props</h3>
-                {currentSvg?.props.map((prop) => (
-                  <Li key={prop.name}>
-                    <span>{prop.name}: </span>
-                    <span>{prop.description}</span>
-                  </Li>
-                ))}
-              </div>
-            </DetailContainer>
-            <SvgSource>
-              <ButtonContainer>
+    <DetailSection>
+      {currentSvg && (
+        <MainDiv>
+          <DetailContainer>
+            <h2>{currentSvg.name}</h2>
+            <DetailImage>
+              <img
+                src={import.meta.env.VITE_API_URL + currentSvg.image}
+                alt={currentSvg.name}
+                style={{ width: "100%" }}
+              />
+            </DetailImage>
+            <p className="description">{currentSvg.description}</p>
+            <h3>Component Props</h3>
+            <ul>
+              {currentSvg.props.map((prop) => (
+                <Li key={prop.name}>
+                  <span>{prop.name}: </span>
+                  <span>{prop.description}</span>
+                </Li>
+              ))}
+            </ul>
+          </DetailContainer>
+
+          <RightColumnWrapper>
+            <ButtonsDiv>
+              <LeftButtons>
                 <button
-                  className={language === "default" ? "active" : ""}
+                  className={`default ${
+                    language === "default" ? "active" : ""
+                  }`}
                   onClick={() => handleLanguageChange("default")}
                 >
                   Default
                 </button>
                 <button
-                  className={language === "js" ? "active" : ""}
+                  className={`js ${language === "js" ? "active" : ""}`}
                   onClick={() => handleLanguageChange("js")}
                 >
                   JS
                 </button>
                 <button
-                  className={language === "ts" ? "active" : ""}
+                  className={`ts ${language === "ts" ? "active" : ""}`}
                   onClick={() => handleLanguageChange("ts")}
                 >
                   TS
                 </button>
-                <button onClick={handleCopyCode} disabled={copying}>
-                  {copying ? "...copying" : "Copy"}
-                </button>
-              </ButtonContainer>
-              {components.length > 0 && (
-                <Suspense fallback={<div>Loading SyntaxHighlighter...</div>}>
-                  <SyntaxHighlighter
-                    language={language === "ts" ? "typescript" : "javascript"}
-                    style={atomDark}
-                  >
-                    {getSyntaxHighlighterCode()}
-                  </SyntaxHighlighter>
-                </Suspense>
-              )}
-            </SvgSource>
-          </>
-        )}
-        <div></div>
-      </DetailSection>
-    </>
+              </LeftButtons>
+
+              <CopyButton onClick={handleCopyCode} disabled={copying}>
+                <svg
+                  width="68"
+                  height="44"
+                  viewBox="0 0 68 44"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    width="68"
+                    height="44"
+                    rx="14"
+                    fill="url(#paint0_linear_58_288)"
+                  />
+                  <path
+                    d="M28 21C28 18.172 28 16.757 28.879 15.879C29.757 15 31.172 15 34 15H37C39.828 15 41.243 15 42.121 15.879C43 16.757 43 18.172 43 21V26C43 28.828 43 30.243 42.121 31.121C41.243 32 39.828 32 37 32H34C31.172 32 29.757 32 28.879 31.121C28 30.243 28 28.828 28 26V21Z"
+                    stroke="white"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    opacity="0.5"
+                    d="M28 29C27.2044 29 26.4413 28.6839 25.8787 28.1213C25.3161 27.5587 25 26.7956 25 26V20C25 16.229 25 14.343 26.172 13.172C27.344 12.001 29.229 12 33 12H37C37.7956 12 38.5587 12.3161 39.1213 12.8787C39.6839 13.4413 40 14.2044 40 15"
+                    stroke="white"
+                    strokeWidth="1.5"
+                  />
+                  <defs>
+                    <linearGradient
+                      id="paint0_linear_58_288"
+                      x1="4.41808"
+                      y1="0"
+                      x2="69.9918"
+                      y2="11.0825"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stopColor="#2973FF" />
+                      <stop offset="0.802885" stopColor="#932EFF" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </CopyButton>
+            </ButtonsDiv>
+
+            <RightSideDiv>
+              <ContentWrapper>
+                <SvgCodeDiv>
+                  <Suspense fallback={<div>Loading SyntaxHighlighter...</div>}>
+                    <SyntaxHighlighter
+                      language={language === "ts" ? "typescript" : "javascript"}
+                      style={atomDark}
+                      wrapLongLines={true}
+                      showLineNumbers={false}
+                    >
+                      {getSyntaxHighlighterCode()}
+                    </SyntaxHighlighter>
+                  </Suspense>
+                </SvgCodeDiv>
+              </ContentWrapper>
+            </RightSideDiv>
+          </RightColumnWrapper>
+        </MainDiv>
+      )}
+    </DetailSection>
   );
 };
 
 export default SvgDetail;
 
+// Styled Components
+
 const DetailSection = styled.div`
-  display: flex;
-  justify-content: space-between;
   width: 100%;
-  padding: 24px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  background-color: #18122a;
+  color: #fff;
+`;
+
+const MainDiv = styled.div`
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  gap: 38px;
+  align-items: stretch;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const DetailContainer = styled.div`
+  width: 522px;
+  height: 552px;
+  border: 1px solid #2765d8;
+  background: #0d0926;
+  border-radius: 20px;
+  padding: 52px 30px 30px;
+  overflow-y: auto;
+
   h2 {
     font-size: 40px;
     text-align: center;
-    margin-bottom: 30px;
-    color: #2765d8;
+    margin-bottom: 20px;
+    color: #2973ff;
     font-weight: 400;
   }
+
   p {
-    font-size: 22px;
+    font-size: 20px;
     text-align: center;
   }
+
   p.description {
-    margin-bottom: 30px;
+    margin: 20px 0;
+    color: #ffffff;
   }
+
   h3 {
+    font-size: 26px;
+    color: #2765d8;
+    margin-top: 40px;
     margin-bottom: 20px;
     text-align: center;
-    font-size: 26px;
-    color: #2765d8;
-    font-weight: 400;
   }
-  @media (max-width: 830px) {
-    flex-direction: column;
-    gap: 30px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 20px;
   }
 `;
-const DetailContainer = styled.div`
-  border: 1px solid #2765d8;
-  padding: 24px;
-  border-radius: 20px;
-  width: 40%;
-  @media (max-width: 1000px) {
-    padding: 10px;
-  }
-  @media (max-width: 830px) {
-    width: 80%;
-    margin: auto;
-  }
-  @media (max-width: 530px) {
-    width: 98%;
-    margin: auto;
-  }
-`;
+
 const DetailImage = styled.div`
-  width: 14%;
-  overflow: hidden;
-  margin: auto;
-  margin-bottom: 50px;
-`;
-const SvgSource = styled.div`
-  width: 50%;
-  height: 80vh;
-  display: flex;
-  position: relative;
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  @media (max-width: 830px) {
-    width: 80%;
-    margin: auto;
-  }
-  @media (max-width: 530px) {
-    width: 98%;
-    margin: auto;
+  width: 156px;
+  margin: 0 auto 30px;
+
+  img {
+    width: 100%;
+    height: auto;
   }
 `;
-const ButtonContainer = styled.div`
-  width: 100%;
+
+const RightColumnWrapper = styled.div`
+  width: 680px;
+  height: 552px;
   display: flex;
-  margin: auto;
-  position: absolute;
-  top: -10px;
-  background-color: transparent;
+  flex-direction: column;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const RightSideDiv = styled.div`
+  flex-grow: 1;
+  background: #1e1e1e;
+  border-radius: 16px;
+  padding: 30px;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    height: auto;
+  }
+`;
+
+const ButtonsDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+`;
+
+const LeftButtons = styled.div`
+  display: flex;
+
   button {
-    width: 33.5%;
-    padding: 5px 10px;
-    background-color: #2765d8;
+    padding: 6px 14px;
+    font-size: 14px;
     color: white;
-    font-size: 16px;
-    &:hover {
-      background-color: #3498db;
-      border-color: #3498db;
-    }
+    background: transparent;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#18122a, #18122a),
+      linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    transition: 0.2s;
+
     &.active {
-      background-color: #3498db;
-      color: #fff;
+      background-color: rgb(24, 18, 42);
+      background-image: none;
+      border: 2px solid #2973ff;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      border-image-source: none;
+      border-color: gray;
+      background-image: none;
     }
   }
+
+  /* These must be outside the button block */
+  button.default {
+    width: 112px;
+    height: 44px;
+  }
+
+  button.js {
+    width: 66px;
+    height: 44px;
+  }
+
+  button.ts {
+    width: 70px;
+    height: 44px;
+  }
 `;
-const Li = styled.li`
-  width: 100%;
+
+const CopyButton = styled.button`
+  background: none;
+  padding: 0;
+  border: none;
+  cursor: pointer;
   display: flex;
-  margin-bottom: 10px;
-  border-radius: 10px;
   align-items: center;
+
+  svg {
+    display: block;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  flex-grow: 1;
+`;
+
+const SvgCodeDiv = styled.div`
+  pre {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+    font-size: 13px;
+  }
+`;
+
+const Li = styled.li`
+  margin-bottom: 10px;
   font-size: 18px;
+  display: flex;
   gap: 10px;
+  justify-content: center;
+
   span:nth-child(1) {
-    font-size: 26px;
-    font-weight: 900;
+    font-weight: bold;
+    color: #2765d8;
   }
 `;
