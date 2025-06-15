@@ -314,16 +314,19 @@ const LeftButtons = styled.div`
   button.default {
     width: 112px;
     height: 44px;
+    cursor: pointer;
   }
 
   button.js {
     width: 66px;
     height: 44px;
+    cursor: pointer;
   }
 
   button.ts {
     width: 70px;
     height: 44px;
+    cursor: pointer;
   }
 `;
 
