@@ -1,50 +1,45 @@
-import React from "react";
-import { useEffect, useMemo, useState } from "react";
-import useSvgComponents from "../store/useSvgComponents";
-import styled from "styled-components";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import useSvgComponents from "../store/useSvgComponents";
 import SearchBar from "../components/SearchBar";
 
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
   const navigate = useNavigate();
   const location = useLocation();
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const [selectedIcon, setSelectedIcon] = useState<SvgComponentType | null>(
-    null
-  );
-  const [showJS, setShowJS] = useState(true);
-
-  const searchChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleClick = () => setIsOpen(!isOpen);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState(null);
 
   useEffect(() => {
     fetchSvgComponents();
   }, [fetchSvgComponents]);
 
-  const handleSvgClick = (id: string) => {
-    navigate(`/svg/${id}`);
-  };
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    const categoryFromUrl = params.get("category");
+    if (categoryFromUrl !== selectedCategory) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [location.search]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
     if (selectedCategory) {
       params.set("category", selectedCategory);
     } else {
       params.delete("category");
     }
-
     navigate(
       { pathname: location.pathname, search: params.toString() },
       { replace: true }
     );
   }, [selectedCategory, navigate, location.pathname]);
+
   const escapedSearchTerm = useMemo(() => {
     return searchTerm
       .trim()
@@ -53,21 +48,46 @@ const SvgComponents = () => {
   }, [searchTerm]);
 
   const filteredComponents = useMemo(() => {
-    if (!components || components.length === 0) return [];
+  return components.filter(icon => {
+    const category = icon.category ? icon.category.trim().toLowerCase() : "uncategorized";
+    const name = icon.name?.toLowerCase() || "";
 
-    return components.filter((component) => {
-      const matchesSearch = component.name
-        .toLowerCase()
-        .includes(escapedSearchTerm);
-      const matchesCategory = selectedCategory
-        ? component.category === selectedCategory
-        : true;
+    const matchesName = name.includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory
+      ? category === selectedCategory.trim().toLowerCase()
+      : true;
 
-      return matchesSearch && matchesCategory;
-    });
-  }, [components, escapedSearchTerm, selectedCategory]);
+    console.log(`Icon: ${icon.name}, category: ${category}, selected: ${selectedCategory}, matchesCategory: ${matchesCategory}, matchesName: ${matchesName}`);
 
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+    return matchesName && matchesCategory;
+  });
+}, [components, searchTerm, selectedCategory]);
+
+
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleCategorySelect = (category: string | null) => {
+    setSelectedCategory(category?.trim().toLowerCase() || null);
+    setIsOpen(false);
+  };
+  const handleToggleDropdown = () => setIsOpen(!isOpen);
+
+  const handleClick = () => setIsOpen(!isOpen);
+  
+  const categories = useMemo(() => {
+  if (!components) return [];
+  return Array.from(
+    new Set(
+      components.map(
+        (c) => c.category?.trim().toLowerCase() || "uncategorized"
+      )
+    )
+  );
+}, [components]);
+
 
   return (
     <Main>
@@ -127,14 +147,14 @@ const SvgComponents = () => {
           </MobileSearchTitle>
 
           <SearchBarWrapper>
-            <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
+            <SearchBar searchTerm={searchTerm} onChange={handleSearchChange} />
           </SearchBarWrapper>
         </MobileSearchDropdown>
       )}
       <FilterWrapper>
         <DesktopSearchAndFilter>
           <SearchBarWrapper>
-            <SearchBar searchTerm={searchTerm} onChange={searchChangeHandler} />
+            <SearchBar searchTerm={searchTerm} onChange={handleSearchChange} />
           </SearchBarWrapper>
 
           <FilterBoxWrapper>
@@ -175,7 +195,7 @@ const SvgComponents = () => {
                   <FilterRow>
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory("Interface & UI")}
+                      onClick={() => handleCategorySelect("Interface & UI")}
                       aria-pressed={selectedCategory === "Interface & UI"}
                     >
                       <FilterItemSvg
@@ -197,7 +217,9 @@ const SvgComponents = () => {
 
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory("Web & Communication")}
+                      onClick={() =>
+                        handleCategorySelect("Web & Communication")
+                      }
                       aria-pressed={selectedCategory === "Web & Communication"}
                     >
                       <FilterItemSvg
@@ -220,7 +242,7 @@ const SvgComponents = () => {
                   <FilterRow>
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory("People & Society")}
+                      onClick={() => handleCategorySelect("People & Society")}
                       aria-pressed={selectedCategory === "People & Society"}
                     >
                       <FilterItemSvg
@@ -242,7 +264,9 @@ const SvgComponents = () => {
 
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory("Education & Science")}
+                      onClick={() =>
+                        handleCategorySelect("Education & Science")
+                      }
                       aria-pressed={selectedCategory === "Education & Science"}
                     >
                       <FilterItemSvg
@@ -265,7 +289,7 @@ const SvgComponents = () => {
                   <FilterRow>
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory(" Health & Safety")}
+                      onClick={() => handleCategorySelect(" Health & Safety")}
                       aria-pressed={selectedCategory === " Health & Safety"}
                     >
                       <FilterItemSvg
@@ -287,7 +311,7 @@ const SvgComponents = () => {
 
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory(" Business & Work")}
+                      onClick={() => handleCategorySelect(" Business & Work")}
                       aria-pressed={selectedCategory === " Business & Work"}
                     >
                       <FilterItemSvg
@@ -311,7 +335,7 @@ const SvgComponents = () => {
                     <FilterItem
                       type="button"
                       onClick={() =>
-                        setSelectedCategory(" Industry & Technology")
+                        handleCategorySelect(" Industry & Technology")
                       }
                       aria-pressed={
                         selectedCategory === " Industry & Technology"
@@ -336,7 +360,9 @@ const SvgComponents = () => {
 
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory(" Travel & Transport")}
+                      onClick={() =>
+                        handleCategorySelect(" Travel & Transport")
+                      }
                       aria-pressed={selectedCategory === " Travel & Transport"}
                     >
                       <FilterItemSvg
@@ -359,7 +385,9 @@ const SvgComponents = () => {
                   <FilterRow>
                     <FilterItem
                       type="button"
-                      onClick={() => setSelectedCategory("Culture & Lifestyle")}
+                      onClick={() =>
+                        handleCategorySelect("Culture & Lifestyle")
+                      }
                       aria-pressed={selectedCategory === " Culture & Lifestyle"}
                     >
                       <FilterItemSvg
@@ -382,7 +410,7 @@ const SvgComponents = () => {
                     <FilterItem
                       type="button"
                       onClick={() =>
-                        setSelectedCategory("Nature & Entertainment")
+                        handleCategorySelect("Nature & Entertainment")
                       }
                       aria-pressed={
                         selectedCategory === " Nature & Entertainment"

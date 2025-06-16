@@ -10,9 +10,11 @@ const Header = () => {
 
   const handleClick = () => setIsOpen(!isOpen);
 
-  useEffect(() => {
+ useEffect(() => {
+  if (isOpen) {
     setIsOpen(false);
-  }, [location]);
+  }
+}, [location]);
 
   return (
     <>

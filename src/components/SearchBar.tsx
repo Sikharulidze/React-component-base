@@ -98,6 +98,7 @@ const StyledInput = styled.input`
   background-origin: border-box;
   background-clip: padding-box, border-box;
   background-color: transparent;
+  color: white;
 
   &::placeholder {
     font-size: 18px;
