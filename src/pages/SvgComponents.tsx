@@ -1,15 +1,18 @@
+import React from "react";
 import { useEffect, useMemo, useState } from "react";
 import useSvgComponents from "../store/useSvgComponents";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 
 const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const [selectedIcon, setSelectedIcon] = useState<SvgComponentType | null>(
     null
   );
@@ -28,7 +31,20 @@ const SvgComponents = () => {
   const handleSvgClick = (id: string) => {
     navigate(`/svg/${id}`);
   };
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
 
+    if (selectedCategory) {
+      params.set("category", selectedCategory);
+    } else {
+      params.delete("category");
+    }
+
+    navigate(
+      { pathname: location.pathname, search: params.toString() },
+      { replace: true }
+    );
+  }, [selectedCategory, navigate, location.pathname]);
   const escapedSearchTerm = useMemo(() => {
     return searchTerm
       .trim()
@@ -157,7 +173,11 @@ const SvgComponents = () => {
                     Choose by <span>Category</span>
                   </FilterTitle>
                   <FilterRow>
-                    <FilterItem type="button">
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory("Interface & UI")}
+                      aria-pressed={selectedCategory === "Interface & UI"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -174,7 +194,12 @@ const SvgComponents = () => {
                       </FilterItemSvg>
                       Interface & UI
                     </FilterItem>
-                    <FilterItem type="button">
+
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory("Web & Communication")}
+                      aria-pressed={selectedCategory === "Web & Communication"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -193,7 +218,11 @@ const SvgComponents = () => {
                     </FilterItem>
                   </FilterRow>
                   <FilterRow>
-                    <FilterItem type="button">
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory("People & Society")}
+                      aria-pressed={selectedCategory === "People & Society"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -210,7 +239,12 @@ const SvgComponents = () => {
                       </FilterItemSvg>
                       People & Society
                     </FilterItem>
-                    <FilterItem type="button">
+
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory("Education & Science")}
+                      aria-pressed={selectedCategory === "Education & Science"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -229,7 +263,11 @@ const SvgComponents = () => {
                     </FilterItem>
                   </FilterRow>
                   <FilterRow>
-                    <FilterItem type="button">
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory(" Health & Safety")}
+                      aria-pressed={selectedCategory === " Health & Safety"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -246,7 +284,12 @@ const SvgComponents = () => {
                       </FilterItemSvg>
                       Health & Safety
                     </FilterItem>
-                    <FilterItem type="button">
+
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory(" Business & Work")}
+                      aria-pressed={selectedCategory === " Business & Work"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -265,7 +308,15 @@ const SvgComponents = () => {
                     </FilterItem>
                   </FilterRow>
                   <FilterRow>
-                    <FilterItem type="button">
+                    <FilterItem
+                      type="button"
+                      onClick={() =>
+                        setSelectedCategory(" Industry & Technology")
+                      }
+                      aria-pressed={
+                        selectedCategory === " Industry & Technology"
+                      }
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -282,7 +333,12 @@ const SvgComponents = () => {
                       </FilterItemSvg>
                       Industry & Technology
                     </FilterItem>
-                    <FilterItem type="button">
+
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory(" Travel & Transport")}
+                      aria-pressed={selectedCategory === " Travel & Transport"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -301,7 +357,11 @@ const SvgComponents = () => {
                     </FilterItem>
                   </FilterRow>
                   <FilterRow>
-                    <FilterItem type="button">
+                    <FilterItem
+                      type="button"
+                      onClick={() => setSelectedCategory("Culture & Lifestyle")}
+                      aria-pressed={selectedCategory === " Culture & Lifestyle"}
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -318,7 +378,16 @@ const SvgComponents = () => {
                       </FilterItemSvg>
                       Culture & Lifestyle
                     </FilterItem>
-                    <FilterItem type="button">
+
+                    <FilterItem
+                      type="button"
+                      onClick={() =>
+                        setSelectedCategory("Nature & Entertainment")
+                      }
+                      aria-pressed={
+                        selectedCategory === " Nature & Entertainment"
+                      }
+                    >
                       <FilterItemSvg
                         width="25"
                         height="24"
@@ -349,8 +418,6 @@ const SvgComponents = () => {
             <IconCard
               key={icon.id || icon.name}
               onClick={() => navigate(`/svg/${icon.id}`)}
-
-
             >
               <IconInner>
                 <img
