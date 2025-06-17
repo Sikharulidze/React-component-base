@@ -20,25 +20,33 @@ const SvgComponents = () => {
   }, [fetchSvgComponents]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const categoryFromUrl = params.get("category");
-    if (categoryFromUrl !== selectedCategory) {
-      setSelectedCategory(categoryFromUrl);
-    }
-  }, [location.search]);
+    console.log(
+      "Component categories:",
+      components.map((c) => c.category)
+    );
+  }, [components]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (selectedCategory) {
-      params.set("category", selectedCategory);
-    } else {
+    const normalizedSelectedCategory =
+      selectedCategory?.trim().toLowerCase() || null;
+
+    if (normalizedSelectedCategory) {
+      if (params.get("category") !== normalizedSelectedCategory) {
+        params.set("category", normalizedSelectedCategory);
+        navigate(
+          { pathname: location.pathname, search: params.toString() },
+          { replace: true }
+        );
+      }
+    } else if (params.has("category")) {
       params.delete("category");
+      navigate(
+        { pathname: location.pathname, search: params.toString() },
+        { replace: true }
+      );
     }
-    navigate(
-      { pathname: location.pathname, search: params.toString() },
-      { replace: true }
-    );
-  }, [selectedCategory, navigate, location.pathname]);
+  }, [selectedCategory, navigate, location.pathname, location.search]);
 
   const escapedSearchTerm = useMemo(() => {
     return searchTerm
@@ -48,46 +56,37 @@ const SvgComponents = () => {
   }, [searchTerm]);
 
   const filteredComponents = useMemo(() => {
-  return components.filter(icon => {
-    const category = icon.category ? icon.category.trim().toLowerCase() : "uncategorized";
-    const name = icon.name?.toLowerCase() || "";
+    return components.filter((icon) => {
+      const iconCategory = icon.category?.trim().toLowerCase() || "";
+      const selected = selectedCategory?.trim().toLowerCase() || "";
+      const iconName = icon.name?.toLowerCase() || "";
+      const search = searchTerm.toLowerCase();
 
-    const matchesName = name.includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory
-      ? category === selectedCategory.trim().toLowerCase()
-      : true;
+      const matchesSearch = iconName.includes(search);
+      const matchesCategory = selected ? iconCategory === selected : true;
 
-    console.log(`Icon: ${icon.name}, category: ${category}, selected: ${selectedCategory}, matchesCategory: ${matchesCategory}, matchesName: ${matchesName}`);
-
-    return matchesName && matchesCategory;
-  });
-}, [components, searchTerm, selectedCategory]);
-
-
+      return matchesSearch && matchesCategory;
+    });
+  }, [components, searchTerm, selectedCategory]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   const handleCategorySelect = (category: string | null) => {
-    setSelectedCategory(category?.trim().toLowerCase() || null);
+    setSelectedCategory(category ? category.trim().toLowerCase() : null);
     setIsOpen(false);
   };
-  const handleToggleDropdown = () => setIsOpen(!isOpen);
 
   const handleClick = () => setIsOpen(!isOpen);
-  
-  const categories = useMemo(() => {
-  if (!components) return [];
-  return Array.from(
-    new Set(
-      components.map(
-        (c) => c.category?.trim().toLowerCase() || "uncategorized"
-      )
-    )
-  );
-}, [components]);
 
+  const categories = useMemo(() => {
+    // Collect unique normalized categories from the API icons data
+    const cats = new Set(
+      components.map((c) => c.category?.trim().toLowerCase()).filter(Boolean)
+    );
+    return Array.from(cats);
+  }, [components]);
 
   return (
     <Main>
@@ -106,7 +105,7 @@ const SvgComponents = () => {
           </svg>
         </MobileSearchButton>
 
-        <MobileFilterButton onClick={() => setIsFilterOpen(true)}>
+        <MobileFilterButton onClick={() => setIsOpen(true)}>
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -195,8 +194,10 @@ const SvgComponents = () => {
                   <FilterRow>
                     <FilterItem
                       type="button"
-                      onClick={() => handleCategorySelect("Interface & UI")}
-                      aria-pressed={selectedCategory === "Interface & UI"}
+                      onClick={() => handleCategorySelect("interface & ui")}
+                      aria-pressed={
+                        selectedCategory?.toLowerCase() === "interface & ui"
+                      }
                     >
                       <FilterItemSvg
                         width="25"
@@ -206,8 +207,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -220,7 +221,7 @@ const SvgComponents = () => {
                       onClick={() =>
                         handleCategorySelect("Web & Communication")
                       }
-                      aria-pressed={selectedCategory === "Web & Communication"}
+                      aria-pressed={selectedCategory === "web & communication"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -230,8 +231,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -243,7 +244,7 @@ const SvgComponents = () => {
                     <FilterItem
                       type="button"
                       onClick={() => handleCategorySelect("People & Society")}
-                      aria-pressed={selectedCategory === "People & Society"}
+                      aria-pressed={selectedCategory === "people & society"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -253,8 +254,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -267,7 +268,7 @@ const SvgComponents = () => {
                       onClick={() =>
                         handleCategorySelect("Education & Science")
                       }
-                      aria-pressed={selectedCategory === "Education & Science"}
+                      aria-pressed={selectedCategory === "education & science"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -277,8 +278,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -290,7 +291,7 @@ const SvgComponents = () => {
                     <FilterItem
                       type="button"
                       onClick={() => handleCategorySelect(" Health & Safety")}
-                      aria-pressed={selectedCategory === " Health & Safety"}
+                      aria-pressed={selectedCategory === " health & safety"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -300,8 +301,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -312,7 +313,7 @@ const SvgComponents = () => {
                     <FilterItem
                       type="button"
                       onClick={() => handleCategorySelect(" Business & Work")}
-                      aria-pressed={selectedCategory === " Business & Work"}
+                      aria-pressed={selectedCategory === " business & work"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -322,8 +323,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -338,7 +339,7 @@ const SvgComponents = () => {
                         handleCategorySelect(" Industry & Technology")
                       }
                       aria-pressed={
-                        selectedCategory === " Industry & Technology"
+                        selectedCategory === " industry & technology"
                       }
                     >
                       <FilterItemSvg
@@ -349,8 +350,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -363,7 +364,7 @@ const SvgComponents = () => {
                       onClick={() =>
                         handleCategorySelect(" Travel & Transport")
                       }
-                      aria-pressed={selectedCategory === " Travel & Transport"}
+                      aria-pressed={selectedCategory === " travel & transport"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -373,8 +374,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -388,7 +389,7 @@ const SvgComponents = () => {
                       onClick={() =>
                         handleCategorySelect("Culture & Lifestyle")
                       }
-                      aria-pressed={selectedCategory === " Culture & Lifestyle"}
+                      aria-pressed={selectedCategory === " culture & lifestyle"}
                     >
                       <FilterItemSvg
                         width="25"
@@ -398,8 +399,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
@@ -413,7 +414,7 @@ const SvgComponents = () => {
                         handleCategorySelect("Nature & Entertainment")
                       }
                       aria-pressed={
-                        selectedCategory === " Nature & Entertainment"
+                        selectedCategory === " nature & entertainment"
                       }
                     >
                       <FilterItemSvg
@@ -424,8 +425,8 @@ const SvgComponents = () => {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M19.691 4C19.9056 4 20.1113 4.08523 20.2631 4.23695C20.4148 4.38866 20.5 4.59443 20.5 4.80899V12C20.5 12.2146 20.4148 12.4203 20.2631 12.572C20.1113 12.7238 19.9056 12.809 19.691 12.809C19.4765 12.809 19.2707 12.7238 19.119 12.572C18.9673 12.4203 18.882 12.2146 18.882 12V6.76135L7.26135 18.382H12.5C12.7146 18.382 12.9203 18.4673 13.072 18.619C13.2238 18.7707 13.309 18.9765 13.309 19.191C13.309 19.4056 13.2238 19.6113 13.072 19.7631C12.9203 19.9148 12.7146 20 12.5 20H5.30899C5.09443 20 4.88866 19.9148 4.73695 19.7631C4.58523 19.6113 4.5 19.4056 4.5 19.191V12C4.5 11.8938 4.52093 11.7886 4.56158 11.6904C4.60224 11.5923 4.66183 11.5031 4.73695 11.428C4.81207 11.3528 4.90125 11.2932 4.9994 11.2526C5.09755 11.2119 5.20275 11.191 5.30899 11.191C5.41523 11.191 5.52042 11.2119 5.61858 11.2526C5.71673 11.2932 5.80591 11.3528 5.88103 11.428C5.95615 11.5031 6.01574 11.5923 6.0564 11.6904C6.09705 11.7886 6.11798 11.8938 6.11798 12V17.2387L17.7387 5.61798H12.5C12.2854 5.61798 12.0797 5.53275 11.928 5.38103C11.7762 5.22932 11.691 5.02355 11.691 4.80899C11.691 4.59443 11.7762 4.38866 11.928 4.23695C12.0797 4.08523 12.2854 4 12.5 4H19.691Z"
                           fill="white"
                         />
