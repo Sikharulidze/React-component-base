@@ -16,7 +16,7 @@ const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
   const navigate = useNavigate();
   const location = useLocation();
-  const [showJS, setShowJS] = useState(true);
+
   const [showInterfaceUIIcon, setShowInterfaceUIIcon] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,22 +94,24 @@ const SvgComponents = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+  
   const handleCategorySelect = (categoryLabel: string) => {
-    const backendCategory =
-      categoryMap[categoryLabel.toLowerCase()] || categoryLabel.toLowerCase();
+  const backendCategory =
+    categoryMap[categoryLabel.toLowerCase()] || categoryLabel.toLowerCase();
 
-    setSelectedCategory(backendCategory);
+  setSelectedCategory(backendCategory);
 
-    const match = components.find(
-      (item) => item.collectionName?.toLowerCase() === backendCategory
-    );
+  const match = components.find(
+    (item) => item.collectionName?.toLowerCase() === backendCategory
+  );
 
-    if (match) {
-      setSelectedIcon(match);
-    }
+  if (match) {
+    setSelectedIcon(match);
+  }
 
-    navigate(`/icons?category=${encodeURIComponent(backendCategory)}`);
-  };
+  navigate(`/icons?category=${encodeURIComponent(backendCategory)}`);
+  setIsOpen(false); // ✅ CLOSE the dropdown
+};
 
   const handleClick = () => setIsOpen(!isOpen);
 
