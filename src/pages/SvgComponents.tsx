@@ -16,16 +16,10 @@ const SvgComponents = () => {
   const { components, fetchSvgComponents } = useSvgComponents();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [showInterfaceUIIcon, setShowInterfaceUIIcon] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-  const [selectedIcon, setSelectedIcon] = useState<SvgComponentType | null>(
-    null
-  );
 
   useEffect(() => {
     fetchSvgComponents();
@@ -69,13 +63,6 @@ const SvgComponents = () => {
     }
   }, [selectedCategory, navigate, location.pathname, location.search]);
 
-  const escapedSearchTerm = useMemo(() => {
-    return searchTerm
-      .trim()
-      .toLowerCase()
-      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }, [searchTerm]);
-
   const filteredComponents = useMemo(() => {
     return components.filter((icon) => {
       const iconCategory = icon.collectionName?.trim().toLowerCase() || "";
@@ -94,36 +81,19 @@ const SvgComponents = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
-  
+
   const handleCategorySelect = (categoryLabel: string) => {
-  const backendCategory =
-    categoryMap[categoryLabel.toLowerCase()] || categoryLabel.toLowerCase();
+    const backendCategory =
+      categoryMap[categoryLabel.toLowerCase()] || categoryLabel.toLowerCase();
 
-  setSelectedCategory(backendCategory);
+    setSelectedCategory(backendCategory);
 
-  const match = components.find(
-    (item) => item.collectionName?.toLowerCase() === backendCategory
-  );
-
-  if (match) {
-    setSelectedIcon(match);
-  }
-
-  navigate(`/icons?category=${encodeURIComponent(backendCategory)}`);
-  setIsOpen(false); // ✅ CLOSE the dropdown
-};
+    navigate(`/icons?category=${encodeURIComponent(backendCategory)}`);
+    setIsOpen(false);
+  };
 
   const handleClick = () => setIsOpen(!isOpen);
 
-  // const categories = useMemo(() => {
-  //   const cats = new Set(
-  //     components
-  //       .map((c) => c.category?.trim().toLowerCase())
-  //       .filter(Boolean) as string[]
-  //   );
-  //   return Array.from(cats);
-  // }, [components]);
-  console.log(components);
   return (
     <Main>
       <MobileActionsWrapper>
@@ -186,6 +156,7 @@ const SvgComponents = () => {
           </SearchBarWrapper>
         </MobileSearchDropdown>
       )}
+
       <FilterWrapper>
         <DesktopSearchAndFilter>
           <SearchBarWrapper>
@@ -232,7 +203,6 @@ const SvgComponents = () => {
                       type="button"
                       onClick={() => {
                         handleCategorySelect("interface & ui");
-                        setShowInterfaceUIIcon(true);
                       }}
                       aria-pressed={selectedCategory === "user interface"}
                     >
@@ -514,28 +484,6 @@ const Main = styled.div`
   align-items: center;
 `;
 
-const DisplayBox = styled.div`
-  width: 100%;
-  padding: 24px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-`;
-
-const ImageBox = styled.div`
-  width: 60px;
-  height: 60px;
-  border: 1px solid gray;
-  padding: 15px;
-  border-radius: 15px;
-  cursor: pointer;
-`;
-
-const ImageElement = styled.img`
-  width: 100%;
-`;
-
 const FilterWrapper = styled.div`
   width: 100%;
   max-width: 1270px;
@@ -666,13 +614,15 @@ const IconCard = styled.div`
     inset: 0;
     padding: 2px;
     border-radius: 12px;
-
     background: linear-gradient(to right, #2973ff, #932eff);
 
     -webkit-mask: linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
+
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
+
     z-index: -1;
   }
 

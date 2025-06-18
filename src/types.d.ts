@@ -14,6 +14,7 @@ export type SvgComponentType = {
   "ts-snippet": string;
   id: string;
   collectionName?: string;
+  category?: string;
 };
 
 export type FeedbackType = {
