@@ -594,6 +594,12 @@ const IconsGrid = styled.div`
   gap: 30px;
   padding-bottom: 80px;
   row-gap: 41px;
+
+  @media (max-width: 768px) {
+    display: flex;
+    width: 350px;
+    margin-top: 0;
+  }
 `;
 
 const IconCard = styled.div`

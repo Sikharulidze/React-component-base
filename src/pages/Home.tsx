@@ -90,7 +90,6 @@ const Home = () => {
 
 export default Home;
 const Main = styled.main`
-  height: calc(100vh - 96px);
   width: 100%;
   background-size: cover;
   background-position: center;

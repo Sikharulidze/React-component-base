@@ -5,6 +5,7 @@ import SvgComponents from "./pages/SvgComponents";
 import SvgDetail from "./pages/SvgDetail";
 import Home from "./pages/Home";
 import Feedback from "./pages/Feedback";
+import Footer from "./components/shared/Footer";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/svg/:id" element={<SvgDetail />} />
         <Route path="/feedback" element={<Feedback />} />
       </Routes>
+      <Footer />
     </Main>
   );
 }
