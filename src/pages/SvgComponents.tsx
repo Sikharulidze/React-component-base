@@ -583,6 +583,17 @@ const FilterDropdown = styled.div`
       transform: translateX(0);
     }
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const IconsGrid = styled.div`
@@ -718,6 +729,12 @@ const FilterRowsContainer = styled.div`
   gap: 20px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 const FilterRow = styled.div`
