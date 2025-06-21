@@ -186,7 +186,7 @@ const StyledFooter = styled.footer`
     .footer-separator {
       width: 100%;
       height: 2px;
-      background: #fff;
+      background: #c4c4c4;
       margin: auto;
       border-radius: 14px;
     }
@@ -317,6 +317,7 @@ const StyledFooter = styled.footer`
 
     .footer-main {
       margin: 36px auto 20px;
+      justify-content: center;
     }
 
     .footer-newsletter.mobile {

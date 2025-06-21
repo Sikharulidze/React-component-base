@@ -678,6 +678,7 @@ const IconInner = styled.div`
     text-align: center;
     color: #fff;
   }
+
 `;
 
 const IconLabel = styled.span`
@@ -685,6 +686,7 @@ const IconLabel = styled.span`
   margin-top: 8px;
   color: white;
   text-align: center;
+  
 `;
 
 const FilterItemSvg = styled.svg`
@@ -741,6 +743,7 @@ const FilterRow = styled.div`
   display: flex;
   justify-content: center;
   gap: 20px;
+  
 `;
 
 const FilterItem = styled.button`
@@ -778,6 +781,8 @@ const FilterItem = styled.button`
   &:focus {
     outline: none;
   }
+
+  
 `;
 
 const MobileActionsWrapper = styled.div`
