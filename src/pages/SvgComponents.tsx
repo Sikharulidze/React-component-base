@@ -577,7 +577,6 @@ const IconsGrid = styled.div`
   row-gap: 41px;
 
   @media (max-width: 768px) {
-    display: flex;
     width: 350px;
     margin-top: 0;
   }
@@ -768,12 +767,10 @@ const FilterItem = styled.button`
 `;
 
 const MobileActionsWrapper = styled.div`
-  display: none;
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 0 23px;
-  margin-top: 80px;
 `;
 
 const MobileSearchButton = styled.button`

@@ -172,7 +172,7 @@ const StyledFooter = styled.footer`
 
   .footer-main {
     display: flex;
-    width: 100%;
+    width: 1240px;
     margin: auto;
     margin-top: 50px;
   }
@@ -318,6 +318,9 @@ const StyledFooter = styled.footer`
     .footer-main {
       margin: 36px auto 20px;
       justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
     }
 
     .footer-newsletter.mobile {

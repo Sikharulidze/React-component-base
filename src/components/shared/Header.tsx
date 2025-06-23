@@ -10,11 +10,11 @@ const Header = () => {
 
   const handleClick = () => setIsOpen(!isOpen);
 
- useEffect(() => {
-  if (isOpen) {
-    setIsOpen(false);
-  }
-}, [location]);
+  useEffect(() => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  }, [location]);
 
   return (
     <>
@@ -240,6 +240,7 @@ const MobileHeader = styled.header`
   background-color: #18122a;
   width: 100%;
   height: 158px;
+  margin-bottom: 80px;
 
   @media (min-width: 768px) {
     display: none;
