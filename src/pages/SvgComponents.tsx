@@ -96,39 +96,7 @@ const SvgComponents = () => {
 
   return (
     <Main>
-      <MobileActionsWrapper>
-        <MobileSearchButton onClick={() => setIsMobileSearchOpen(true)}>
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </MobileSearchButton>
-
-        <MobileFilterButton onClick={() => setIsOpen(true)}>
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="4" y1="21" x2="4" y2="14" />
-            <line x1="4" y1="10" x2="4" y2="3" />
-            <line x1="12" y1="21" x2="12" y2="12" />
-            <line x1="12" y1="8" x2="12" y2="3" />
-            <line x1="20" y1="21" x2="20" y2="16" />
-            <line x1="20" y1="12" x2="20" y2="3" />
-          </svg>
-        </MobileFilterButton>
-      </MobileActionsWrapper>
+     
       {isMobileSearchOpen && (
         <MobileSearchDropdown>
           <MobileSearchTitle>
@@ -417,6 +385,40 @@ const SvgComponents = () => {
           </FilterRowsContainer>
         </FilterDropdown>
       )}
+
+       <MobileActionsWrapper>
+        <MobileSearchButton onClick={() => setIsMobileSearchOpen(true)}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </MobileSearchButton>
+
+        <MobileFilterButton onClick={() => setIsOpen(true)}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="4" y1="21" x2="4" y2="14" />
+            <line x1="4" y1="10" x2="4" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12" y2="3" />
+            <line x1="20" y1="21" x2="20" y2="16" />
+            <line x1="20" y1="12" x2="20" y2="3" />
+          </svg>
+        </MobileFilterButton>
+      </MobileActionsWrapper>
 
       {filteredComponents.length > 0 ? (
         <IconsGrid>
@@ -771,6 +773,7 @@ const MobileActionsWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 0 23px;
+  margin-bottom: 20px;
 `;
 
 const MobileSearchButton = styled.button`
