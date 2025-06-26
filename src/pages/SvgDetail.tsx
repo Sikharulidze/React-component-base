@@ -48,7 +48,6 @@ const SvgDetail = () => {
     const code = getSyntaxHighlighterCode();
     try {
       await navigator.clipboard.writeText(code ?? "");
-      console.log("Code copied to clipboard");
       if (currentSvg) {
         await copyClickCounter(currentSvg.name);
       }
@@ -77,9 +76,31 @@ const SvgDetail = () => {
             <p className="description">{currentSvg.description}</p>
             <ButtonsWrapper>
               <PropsButtons>
-                {currentSvg?.props.map((prop) => (
-                  <button key={prop.name}>{prop.name}</button>
-                ))}
+                {currentSvg?.props.map((prop) => {
+                  const [clicked, setClicked] = useState(false);
+                  return (
+                    <TooltipWrapper
+                      key={prop.name}
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevents bubbling
+                        setClicked((prev) => !prev);
+                      }}
+                      onMouseLeave={() => setClicked(false)}
+                    >
+                      <TooltipBox $visible={clicked}>
+                        <p style={{ margin: 0, fontWeight: "bold" }}>
+                          {prop.name}
+                        </p>
+                        <p style={{ margin: "4px 0" }}>{prop.description}</p>
+                        <p style={{ margin: 0 }}>
+                          <strong>Required:</strong>{" "}
+                          {prop.require ? "Yes" : "No"}
+                        </p>
+                      </TooltipBox>
+                      <button>{prop.name}</button>
+                    </TooltipWrapper>
+                  );
+                })}
               </PropsButtons>
             </ButtonsWrapper>
           </DetailContainer>
@@ -177,7 +198,6 @@ const SvgDetail = () => {
 export default SvgDetail;
 
 // Styled Components
-
 const DetailSection = styled.div`
   width: 100%;
   margin: 0 auto;
@@ -197,6 +217,7 @@ const MainDiv = styled.div`
     flex-direction: column;
   }
 `;
+
 const DetailContainer = styled.div`
   width: 522px;
   height: 552px;
@@ -360,6 +381,7 @@ const SvgCodeDiv = styled.div`
     font-size: 13px;
   }
 `;
+
 const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -389,5 +411,50 @@ const PropsButtons = styled.div`
     &:hover {
       background-color: #18122a;
     }
+  }
+`;
+
+const TooltipWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &:hover > div {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -10px);
+  }
+`;
+
+const TooltipBox = styled.div<{ $visible?: boolean }>`
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: #1e1e1e;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  border: 2px solid transparent;
+  background-image: linear-gradient(#1e1e1e, #1e1e1e),
+    linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+
+  width: 140px;
+  height: 71px;
+  text-align: center;
+  font-size: 13px;
+
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  visibility: ${({ $visible }) => ($visible ? "visible" : "hidden")};
+  transition: all 0.25s ease-in-out;
+  z-index: 10;
+  box-shadow: 0px 0px 8px rgba(147, 46, 255, 0.5);
+  overflow: hidden;
+  white-space: normal;
+    p, span {
+    font-size: 11px;
   }
 `;
