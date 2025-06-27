@@ -10,6 +10,10 @@ const SyntaxHighlighter = lazy(
 );
 
 const SvgDetail = () => {
+  const [clickedProps, setClickedProps] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+
   const { id } = useParams();
   const { components, fetchSvgComponents } = useSvgComponents();
 
@@ -77,17 +81,32 @@ const SvgDetail = () => {
             <ButtonsWrapper>
               <PropsButtons>
                 {currentSvg?.props.map((prop) => {
-                  const [clicked, setClicked] = useState(false);
+                  const isVisible = clickedProps[prop.name] || false;
+
+                  const toggleTooltip = () => {
+                    setClickedProps((prev) => ({
+                      ...prev,
+                      [prop.name]: !prev[prop.name],
+                    }));
+                  };
+
+                  const hideTooltip = () => {
+                    setClickedProps((prev) => ({
+                      ...prev,
+                      [prop.name]: false,
+                    }));
+                  };
+
                   return (
                     <TooltipWrapper
                       key={prop.name}
                       onClick={(e) => {
-                        e.stopPropagation(); // prevents bubbling
-                        setClicked((prev) => !prev);
+                        e.stopPropagation();
+                        toggleTooltip();
                       }}
-                      onMouseLeave={() => setClicked(false)}
+                      onMouseLeave={hideTooltip}
                     >
-                      <TooltipBox $visible={clicked}>
+                      <TooltipBox $visible={isVisible}>
                         <p style={{ margin: 0, fontWeight: "bold" }}>
                           {prop.name}
                         </p>
@@ -96,7 +115,48 @@ const SvgDetail = () => {
                           <strong>Required:</strong>{" "}
                           {prop.require ? "Yes" : "No"}
                         </p>
+
+                        <svg
+                          width="17"
+                          height="18"
+                          viewBox="0 0 17 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            position: "absolute",
+                            bottom: "-9px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            zIndex: 5,
+                            pointerEvents: "none",
+                          }}
+                        >
+                          <rect
+                            x="1.41421"
+                            y="9.14214"
+                            width="10"
+                            height="10"
+                            transform="rotate(-45 1.41421 9.14214)"
+                            fill="#18122A"
+                            stroke="url(#paint0_linear_796_1372)"
+                            strokeWidth="2"
+                          />
+                          <defs>
+                            <linearGradient
+                              id="paint0_linear_796_1372"
+                              x1="0.779661"
+                              y1="9.14214"
+                              x2="12.5414"
+                              y2="10.4284"
+                              gradientUnits="userSpaceOnUse"
+                            >
+                              <stop stopColor="#2973FF" />
+                              <stop offset="0.802885" stopColor="#932EFF" />
+                            </linearGradient>
+                          </defs>
+                        </svg>
                       </TooltipBox>
+
                       <button>{prop.name}</button>
                     </TooltipWrapper>
                   );
@@ -434,7 +494,8 @@ const TooltipBox = styled.div<{ $visible?: boolean }>`
   background: #1e1e1e;
   color: #fff;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: 15px;
+  margin-bottom: 10px;
 
   border: 2px solid transparent;
   background-image: linear-gradient(#1e1e1e, #1e1e1e),
@@ -443,7 +504,6 @@ const TooltipBox = styled.div<{ $visible?: boolean }>`
   background-clip: padding-box, border-box;
 
   width: 140px;
-  height: 71px;
   text-align: center;
   font-size: 13px;
 
@@ -452,9 +512,10 @@ const TooltipBox = styled.div<{ $visible?: boolean }>`
   transition: all 0.25s ease-in-out;
   z-index: 10;
   box-shadow: 0px 0px 8px rgba(147, 46, 255, 0.5);
-  overflow: hidden;
+  overflow: visible;
   white-space: normal;
-    p, span {
+  p,
+  span {
     font-size: 11px;
   }
 `;
