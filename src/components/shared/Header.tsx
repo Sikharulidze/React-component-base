@@ -215,6 +215,11 @@ const LogoContainer = styled.div`
   cursor: pointer;
 `;
 
+const StyledImage = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
 const LogoWrapper = styled.div`
   width: 60px;
   height: 60px;
@@ -225,11 +230,6 @@ const LogoWrapper = styled.div`
     height: 100%;
     object-fit: contain;
   }
-`;
-
-const StyledImage = styled.img`
-  width: 100%;
-  height: 100%;
 `;
 
 const MobileHeader = styled.header`
@@ -246,10 +246,10 @@ const MobileHeader = styled.header`
     display: none;
   }
 `;
+
 const MobileViewport = styled.div`
-  width: 390px;
+  width: 100%;
   height: auto;
-  margin: 0 auto;
   background-color: #18122a;
   overflow-x: hidden;
 
