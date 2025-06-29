@@ -452,7 +452,7 @@ export default SvgComponents;
 const Main = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: #18122a;
+  background: linear-gradient(45deg, #030219 0%, #3f2a64 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

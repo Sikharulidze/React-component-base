@@ -386,7 +386,7 @@ const LeftButtons = styled.div`
 
     &:disabled {
       opacity: 0.6;
-      cursor: not-allowed;
+      :not-allowed ;
       border-image-source: none;
       border-color: gray;
       background-image: none;
@@ -396,7 +396,7 @@ const LeftButtons = styled.div`
   button.default {
     width: 112px;
     height: 44px;
-    cursor: pointer;
+    :pointer ;
   }
 
   button.js {
@@ -426,7 +426,6 @@ const CopyButton = styled.button`
 
   &:disabled {
     opacity: 0.6;
-    cursor: not-allowed;
   }
 `;
 
