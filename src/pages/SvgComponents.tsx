@@ -20,6 +20,7 @@ const SvgComponents = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [clickedIconId, setClickedIconId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSvgComponents();
@@ -424,9 +425,14 @@ const SvgComponents = () => {
           {filteredComponents.map((icon) => (
             <IconCard
               key={icon.id || icon.name}
-              onClick={() => navigate(`/svg/${icon.id}`)}
+              onClick={() => {
+                setClickedIconId(icon.id);
+                setTimeout(() => {
+                  navigate(`/svg/${icon.id}`);
+                }, 80);
+              }}
             >
-              <IconInner>
+              <IconInner clicked={clickedIconId === icon.id}>
                 <img
                   src={import.meta.env.VITE_API_URL + icon.image}
                   alt={icon.name}
@@ -626,8 +632,7 @@ const IconCard = styled.div`
     }
   }
 `;
-
-const IconInner = styled.div`
+const IconInner = styled.div<{ clicked?: boolean }>`
   width: 150px;
   height: 150px;
   border-radius: 10px;
@@ -635,7 +640,8 @@ const IconInner = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
+  background-color: ${({ clicked }) => (clicked ? "#932EFF" : "transparent")};
+  transition: background-color 0.2s ease;
 
   img {
     width: 60px;
@@ -644,6 +650,7 @@ const IconInner = styled.div`
     margin-bottom: 8px;
     transition: transform 0.6s ease;
   }
+
   ${IconCard}:hover & img {
     transform: translateY(6px);
   }
