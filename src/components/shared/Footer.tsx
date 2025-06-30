@@ -266,11 +266,21 @@ const StyledFooter = styled.footer`
     button {
       padding: 18px 30px;
       border-radius: 14px;
-      border: none;
-      background-color: #fff;
-      color: #3333ff;
+      color: #ffffff;
       font-weight: bold;
       font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      border: 2px solid transparent;
+
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      background-image: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
+    }
+
+    button:hover {
+      background-image: linear-gradient(#0d0926, #0d0926),
+        linear-gradient(45deg, #2973ff 0%, #932eff 80%);
     }
   }
   .footer-newsletter.mobile {

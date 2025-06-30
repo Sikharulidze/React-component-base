@@ -505,30 +505,34 @@ const SearchBarWrapper = styled.div`
 `;
 
 const FilterBoxWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-
-  @media (max-width: 767px) {
-  }
-`;
-
-const FilterBox = styled.div`
-  background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
-  color: #ffffff;
-  font-size: 18px;
-  border-radius: 15px;
-  user-select: none;
-  cursor: pointer;
+  background: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
+  padding: 2px;
+  border-radius: 14px;
   width: 108px;
   height: 60px;
   display: flex;
+`;
+
+const FilterBox = styled.div`
+  background: transparent;
+  color: #ffffff;
+  font-size: 18px;
+  border-radius: 12px;
+  user-select: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
+  transition: background 0.3s ease;
 
   &:focus {
     outline: none;
+  }
+
+  &:hover {
+    background: #0d0926;
   }
 `;
 

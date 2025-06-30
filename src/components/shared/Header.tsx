@@ -181,11 +181,32 @@ const LinksContainer = styled.nav`
 const FeedbackContainer = styled.div`
   width: 153px;
   height: 80px;
+  padding: 2px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
-  border-radius: 20px;
+  transition: background 0.3s ease;
+
+  a {
+    color: #ffffff;
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+
+  &:hover {
+    background: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
+  }
+
+  &:hover a {
+    background-color: #0d0926;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -281,22 +302,20 @@ const NavGroup = styled.div`
 
 const StyledNavLink = styled(NavLink)`
   font-size: 20px;
-  color: #e0e0e0;
+  color: #c4c4c4;
   text-decoration: none;
   padding: 10px 16px;
   border-radius: 12px;
   white-space: nowrap;
-  transition: all 0.3s;
+  transition: color 0.3s ease;
 
-  &.feedback-link {
-    background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
-    color: white;
+  &.active {
+    color: #ffffff;
     font-weight: 600;
   }
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    color: #ffffff;
   }
 `;
 
