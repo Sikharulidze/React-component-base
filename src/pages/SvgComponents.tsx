@@ -749,7 +749,7 @@ const FilterItem = styled.button`
   width: fit-content;
   height: 60px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+  background: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
   color: white;
   cursor: pointer;
   user-select: none;

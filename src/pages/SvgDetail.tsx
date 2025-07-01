@@ -4,6 +4,24 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import styled from "styled-components";
 import { copyClickCounter } from "../services/counter-service";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { keyframes } from "styled-components";
+
+const slideInWithOvershoot = keyframes`
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(-15px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`;
 
 const SyntaxHighlighter = lazy(
   () => import("react-syntax-highlighter/dist/esm/default-highlight")
@@ -48,17 +66,16 @@ const SvgDetail = () => {
   };
 
   const handleCopyCode = async () => {
-    setCopying(true);
     const code = getSyntaxHighlighterCode();
     try {
       await navigator.clipboard.writeText(code ?? "");
       if (currentSvg) {
         await copyClickCounter(currentSvg.name);
       }
+      setCopying(true);
+      setTimeout(() => setCopying(false), 1000); // 5 seconds
     } catch (error) {
       console.error("Failed to copy code", error);
-    } finally {
-      setCopying(false);
     }
   };
 
@@ -230,6 +247,30 @@ const SvgDetail = () => {
                   </defs>
                 </svg>
               </CopyButton>
+              {copying && (
+                <CopyNotification>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 11C6 8.172 6 6.757 6.879 5.879C7.757 5 9.172 5 12 5H15C17.828 5 19.243 5 20.121 5.879C21 6.757 21 8.172 21 11V16C21 18.828 21 20.243 20.121 21.121C19.243 22 17.828 22 15 22H12C9.172 22 7.757 22 6.879 21.121C6 20.243 6 18.828 6 16V11Z"
+                      stroke="white"
+                      stroke-width="1.5"
+                    />
+                    <path
+                      opacity="0.5"
+                      d="M6 19C5.20435 19 4.44129 18.6839 3.87868 18.1213C3.31607 17.5587 3 16.7956 3 16V10C3 6.229 3 4.343 4.172 3.172C5.344 2.001 7.229 2 11 2H15C15.7956 2 16.5587 2.31607 17.1213 2.87868C17.6839 3.44129 18 4.20435 18 5"
+                      stroke="white"
+                      stroke-width="1.5"
+                    />
+                  </svg>
+                  Successfully Copied
+                </CopyNotification>
+              )}
             </ButtonsDiv>
 
             <RightSideDiv>
@@ -361,7 +402,6 @@ const ButtonsDiv = styled.div`
   justify-content: space-between;
   background: transparent;
 `;
-
 const LeftButtons = styled.div`
   display: flex;
 
@@ -371,61 +411,89 @@ const LeftButtons = styled.div`
     color: white;
     background: transparent;
     border-radius: 15px;
-    border: 2px solid transparent;
-    background-image: linear-gradient(#18122a, #18122a),
-      linear-gradient(135deg, #2973ff 0%, #932eff 100%);
     background-origin: border-box;
     background-clip: padding-box, border-box;
     transition: 0.2s;
+    position: relative;
 
     &.active {
       background-color: rgb(24, 18, 42);
-      background-image: none;
-      border: 2px solid #2973ff;
+      background-image: linear-gradient(#18122a, #18122a),
+        linear-gradient(45deg, #2973ff 0%, #932eff 80%);
     }
 
     &:disabled {
       opacity: 0.6;
-      :not-allowed ;
       border-image-source: none;
       border-color: gray;
       background-image: none;
+    }
+
+    &.js:not(.active)::after,
+    &.ts:not(.active)::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, #2973ff 0%, #932eff 80%);
+     
     }
   }
 
   button.default {
     width: 112px;
     height: 44px;
-    :pointer ;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#18122a, #18122a),
+      linear-gradient(45deg, #2973ff 0%, #932eff 80%);
   }
 
   button.js {
     width: 66px;
     height: 44px;
     cursor: pointer;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#18122a, #18122a),
+      linear-gradient(0%, #2973ff 45%, #932eff 80%);
   }
 
   button.ts {
     width: 70px;
     height: 44px;
     cursor: pointer;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#18122a, #18122a),
+      linear-gradient(0%, #2973ff 45%, #932eff 80%);
   }
 `;
 
-const CopyButton = styled.button`
-  background: none;
+
+const CopyButton = styled.button<{ copying?: boolean }>`
+  background: transparent;
   padding: 0;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
+  transition: background 0.3s ease;
 
-  svg {
-    display: block;
+  svg rect {
+    transition: fill 0.3s ease;
+  }
+
+  &:hover {
+    background: transparent;
+
+    svg rect {
+      fill: #0d0926 !important;
+    }
   }
 
   &:disabled {
     opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
@@ -455,14 +523,14 @@ const PropsButtons = styled.div`
 
   button {
     padding: 8px 16px;
-    border-radius: 10px;
+    border-radius: 14px;
     font-size: 14px;
     height: 44px;
     color: white;
     background: transparent;
     border: 2px solid transparent;
     background-image: linear-gradient(#18122a, #18122a),
-      linear-gradient(135deg, #2973ff 0%, #932eff 100%);
+      linear-gradient(45deg, #2973ff 0%, #932eff 80%);
     background-origin: border-box;
     background-clip: padding-box, border-box;
     transition: 0.2s;
@@ -517,4 +585,23 @@ const TooltipBox = styled.div<{ $visible?: boolean }>`
   span {
     font-size: 11px;
   }
+`;
+
+const CopyNotification = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #0d0926;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-family: sans-serif;
+  font-size: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  animation: ${slideInWithOvershoot} 0.2s ease forwards;
 `;
