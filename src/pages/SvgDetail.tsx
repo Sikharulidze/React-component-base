@@ -438,7 +438,6 @@ const LeftButtons = styled.div`
       width: 100%;
       height: 1px;
       background: linear-gradient(to right, #2973ff 0%, #932eff 80%);
-     
     }
   }
 
@@ -468,7 +467,6 @@ const LeftButtons = styled.div`
       linear-gradient(0%, #2973ff 45%, #932eff 80%);
   }
 `;
-
 
 const CopyButton = styled.button<{ copying?: boolean }>`
   background: transparent;
@@ -591,17 +589,22 @@ const CopyNotification = styled.div`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #0d0926;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  font-family: sans-serif;
-  font-size: 20px;
-  z-index: 1000;
+  width: 286px;
+  height: 60px;
   display: flex;
   align-items: center;
-  gap: 5px;
-
-  animation: ${slideInWithOvershoot} 0.2s ease forwards;
+  justify-content: center;
+  gap: 8px;
+  font-size: 20px;
+  font-family: sans-serif;
+  color: white;
+  border: 2px solid transparent;
+  border-radius: 15px;
+  background-image: linear-gradient(#0d0926, #0d0926),
+    linear-gradient(90deg, #2973ff, #932eff);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  animation: ${slideInWithOvershoot} 0.3s ease forwards;
 `;
