@@ -472,22 +472,32 @@ const LeftButtons = styled.div`
 const CopyButton = styled.button<{ copying?: boolean }>`
   background: transparent;
   padding: 0;
-  border: none;
+  border-radius: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: background 0.3s ease;
 
-  svg rect {
-    transition: fill 0.3s ease;
-  }
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+-webkit-tap-highlight-color: transparent;
+
+
 
   &:hover {
-    background: transparent;
+    background: linear-gradient(45deg, #2973ff 0%, #932eff 80%) border-box,
+      transparent padding-box;
+
+    border-color: transparent;
 
     svg rect {
       fill: #0d0926 !important;
     }
+  }
+
+    &:focus-visible {
+    outline: none;   
+    box-shadow: none;
   }
 
   &:disabled {

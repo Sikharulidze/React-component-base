@@ -255,7 +255,7 @@ const StyledFooter = styled.footer`
 
       &:focus {
         border: 2px solid transparent;
-        outline: none;
+        
         background-image: linear-gradient(#18122a, #18122a),
           linear-gradient(45deg, #1b4ba5, #7c00ff);
         background-origin: border-box;

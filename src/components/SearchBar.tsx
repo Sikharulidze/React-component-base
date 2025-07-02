@@ -105,10 +105,7 @@ const StyledInput = styled.input`
     color: #bbb;
   }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(147, 46, 255, 0.5);
-  }
+  
 
   @media (max-width: 767px) {
     font-size: 16px;
