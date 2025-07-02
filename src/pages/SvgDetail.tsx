@@ -402,6 +402,7 @@ const ButtonsDiv = styled.div`
   justify-content: space-between;
   background: transparent;
 `;
+
 const LeftButtons = styled.div`
   display: flex;
 

@@ -276,6 +276,7 @@ const StyledFooter = styled.footer`
       background-clip: padding-box, border-box;
       background-origin: padding-box, border-box;
       background-image: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
+      transition: background-color 0.4s ease;
     }
 
     button:hover {

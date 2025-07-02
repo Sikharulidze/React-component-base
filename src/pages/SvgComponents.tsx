@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState,useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import useSvgComponents from "../store/useSvgComponents";
@@ -94,6 +94,27 @@ const SvgComponents = () => {
   };
 
   const handleClick = () => setIsOpen(!isOpen);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+useEffect(() => {
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (
+      isOpen &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  if (isOpen) {
+    document.addEventListener("mousedown", handleOutsideClick);
+  }
+
+  return () => {
+    document.removeEventListener("mousedown", handleOutsideClick);
+  };
+}, [isOpen]);
+
 
   return (
     <Main>
@@ -126,7 +147,7 @@ const SvgComponents = () => {
       </FilterWrapper>
 
       {isOpen && (
-        <FilterDropdown>
+        <FilterDropdown ref={dropdownRef}>
           <CloseButton
             aria-label="Close filter dropdown"
             onClick={() => setIsOpen(false)}
