@@ -89,6 +89,7 @@ const StyledInput = styled.input`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  margin-left: 50px;
 
   border: 3px solid transparent;
   border-radius: 15px;
@@ -105,8 +106,6 @@ const StyledInput = styled.input`
     color: #bbb;
   }
 
-  
-
   @media (max-width: 767px) {
     font-size: 16px;
     padding: 10px;
@@ -118,7 +117,7 @@ const SearchIcon = styled.div`
   position: absolute;
   width: 50px;
   height: 50px;
-  right: -3px;
+  right: -50px;
   bottom: -5px;
   transform: rotate(7.48deg);
   z-index: 1;
