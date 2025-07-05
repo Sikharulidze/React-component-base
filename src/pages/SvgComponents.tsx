@@ -104,6 +104,9 @@ const SvgComponents = () => {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+const mobileSearchRef = useRef<HTMLDivElement>(null);
+
+
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -131,10 +134,54 @@ const SvgComponents = () => {
     }, 300);
   };
 
+  useEffect(() => {
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      mobileSearchRef.current &&
+      !mobileSearchRef.current.contains(e.target as Node)
+    ) {
+      closeMobileSearch();
+    }
+  };
+
+  if (isMobileSearchOpen) {
+    document.addEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [isMobileSearchOpen]);
+
+
+  const closeMobileSearch = () => {
+  setIsClosing(true);
+  setTimeout(() => {
+    setIsMobileSearchOpen(false);
+    setIsClosing(false);
+  }, 300);
+};
+
+
+  useEffect(() => {
+    if (isMobileSearchOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileSearchOpen]);
+
+
+
   return (
     <Main>
-      {isMobileSearchOpen && (
-        <MobileSearchDropdown>
+      {isMobileSearchOpen  && (
+        <MobileSearchDropdown  ref={mobileSearchRef}
+    isClosing={isClosing}>
           <MobileSearchTitle>
             <span className="highlight">Uncover</span>
             <span>Something</span>
@@ -745,7 +792,7 @@ const CloseButton = styled.button`
 
 const FilterTitle = styled.h3`
   margin-bottom: 10px;
-  font-size: 40px;
+  font-size: 36px;
   text-align: center;
 
   span {
@@ -782,14 +829,13 @@ const FilterRow = styled.div`
     width: 349px;
   }
 `;
-
 const FilterItem = styled.button`
   position: relative;
   padding: 0 30px;
   white-space: nowrap;
   width: fit-content;
   height: 60px;
-  border-radius: 18px;
+  border-radius: 14px; /* keep this */
   background: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
   color: white;
   cursor: pointer;
@@ -802,12 +848,12 @@ const FilterItem = styled.button`
   &::before {
     content: "";
     position: absolute;
-    top: 2.2px;
-    left: 2.2px;
-    right: 2.2px;
+    top: 2px;
+    left: 2px;
+    right: 2px;
     bottom: 2px;
     background-color: #29253e;
-    border-radius: 16px;
+    border-radius: 12px;
     z-index: -1;
   }
 
@@ -863,21 +909,20 @@ const MobileFilterButton = styled.button`
     }
   }
 `;
-
-const MobileSearchDropdown = styled.div`
+const MobileSearchDropdown = styled.div<{ isClosing: boolean }>`
   position: fixed;
   margin-top: 15px;
   left: 50%;
   transform: translateX(-50%);
-
   width: 90%;
-  background-color: #221a35;
+  background-color: #18122a;
   border-radius: 15px;
   padding: 20px;
   box-sizing: border-box;
   color: white;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  animation: dropDown 0.3s ease forwards;
+  animation: ${(props) => (props.isClosing ? "slideUp" : "dropDown")} 0.3s ease forwards;
+  z-index: 9999;
 
   @keyframes dropDown {
     from {
@@ -889,7 +934,19 @@ const MobileSearchDropdown = styled.div`
       transform: translateX(-50%) translateY(0);
     }
   }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+  }
 `;
+
 
 const MobileSearchTitle = styled.h3`
   font-size: 28px;

@@ -137,7 +137,6 @@ const DesktopHeader = styled.header`
   align-items: center;
   height: 136px;
   width: 100%;
-  background: linear-gradient(45deg, #030219 0%, #3f2a64 100%);
 
   @media (min-width: 768px) {
     display: flex;
@@ -240,6 +239,7 @@ const LogoContainer = styled.div`
 const StyledImage = styled.img`
   width: 100%;
   height: 100%;
+  
 `;
 
 const LogoWrapper = styled.div`
@@ -259,7 +259,6 @@ const MobileHeader = styled.header`
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  background-color: #18122a;
   width: 100%;
   height: 158px;
   margin-bottom: 80px;
@@ -272,7 +271,7 @@ const MobileHeader = styled.header`
 const MobileViewport = styled.div`
   width: 100%;
   height: auto;
-  background-color: #18122a;
+
   overflow-x: hidden;
 
   @media (min-width: 768px) {

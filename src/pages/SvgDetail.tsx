@@ -303,7 +303,6 @@ const DetailSection = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 60px 20px;
-  background-color: #18122a;
   color: #fff;
 `;
 
@@ -445,6 +444,7 @@ const LeftButtons = styled.div`
   button.default {
     width: 112px;
     height: 44px;
+    font-size: 20px;
     border: 2px solid transparent;
     background-image: linear-gradient(#18122a, #18122a),
       linear-gradient(45deg, #2973ff 0%, #932eff 80%);
@@ -453,6 +453,7 @@ const LeftButtons = styled.div`
   button.js {
     width: 66px;
     height: 44px;
+    font-size: 20px;
     cursor: pointer;
     border: 2px solid transparent;
     background-image: linear-gradient(#18122a, #18122a),
@@ -462,6 +463,7 @@ const LeftButtons = styled.div`
   button.ts {
     width: 70px;
     height: 44px;
+    font-size: 20px;
     cursor: pointer;
     border: 2px solid transparent;
     background-image: linear-gradient(#18122a, #18122a),
@@ -491,6 +493,11 @@ const CopyButton = styled.button<{ copying?: boolean }>`
     svg rect {
       fill: #0d0926 !important;
     }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
   }
 
   &:focus-visible {
@@ -531,7 +538,7 @@ const PropsButtons = styled.div`
   button {
     padding: 8px 16px;
     border-radius: 14px;
-    font-size: 14px;
+    font-size: 18px;
     height: 44px;
     color: white;
     background: transparent;
@@ -590,7 +597,7 @@ const TooltipBox = styled.div<{ $visible?: boolean }>`
   white-space: normal;
   p,
   span {
-    font-size: 11px;
+    font-size: 14px;
   }
 `;
 

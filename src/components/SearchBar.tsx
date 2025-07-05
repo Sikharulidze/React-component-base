@@ -110,6 +110,7 @@ const StyledInput = styled.input`
     font-size: 16px;
     padding: 10px;
     height: 50px;
+    margin-left: 0;
   }
 `;
 
@@ -125,4 +126,8 @@ const SearchIcon = styled.div`
   justify-content: center;
   align-items: center;
   pointer-events: none;
+
+  @media (max-width: 767px) {
+    right: 0;
+  }
 `;
