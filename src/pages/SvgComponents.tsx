@@ -569,8 +569,6 @@ const FilterBox = styled.div`
   align-items: center;
   transition: background 0.3s ease;
 
- 
-
   &:hover {
     background: #0d0926;
   }
@@ -735,8 +733,6 @@ const CloseButton = styled.button`
   align-items: center;
   justify-content: center;
 
-
-
   svg {
     display: block;
   }
@@ -818,8 +814,6 @@ const FilterItem = styled.button`
   &:hover::before {
     background-color: #1f1c33;
   }
-
- 
 `;
 
 const MobileActionsWrapper = styled.div`

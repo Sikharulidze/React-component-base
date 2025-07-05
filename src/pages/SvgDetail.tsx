@@ -480,9 +480,7 @@ const CopyButton = styled.button<{ copying?: boolean }>`
   border: 2px solid transparent;
   background-origin: border-box;
   background-clip: padding-box, border-box;
--webkit-tap-highlight-color: transparent;
-
-
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     background: linear-gradient(45deg, #2973ff 0%, #932eff 80%) border-box,
@@ -495,8 +493,8 @@ const CopyButton = styled.button<{ copying?: boolean }>`
     }
   }
 
-    &:focus-visible {
-    outline: none;   
+  &:focus-visible {
+    outline: none;
     box-shadow: none;
   }
 
@@ -567,14 +565,14 @@ const TooltipBox = styled.div<{ $visible?: boolean }>`
   bottom: 100%;
   left: 50%;
   transform: translate(-50%, 0);
-  background: #1e1e1e;
+  background: #18122a;
   color: #fff;
   padding: 10px 12px;
   border-radius: 15px;
   margin-bottom: 10px;
 
   border: 2px solid transparent;
-  background-image: linear-gradient(#1e1e1e, #1e1e1e),
+  background-image: linear-gradient(#18122a),
     linear-gradient(135deg, #2973ff 0%, #932eff 100%);
   background-origin: padding-box, border-box;
   background-clip: padding-box, border-box;

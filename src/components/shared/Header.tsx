@@ -133,10 +133,11 @@ export default Header;
 
 const DesktopHeader = styled.header`
   display: none;
-  background-color: #18122a;
+
   align-items: center;
   height: 136px;
   width: 100%;
+  background: linear-gradient(45deg, #030219 0%, #3f2a64 100%);
 
   @media (min-width: 768px) {
     display: flex;
