@@ -507,7 +507,7 @@ const CopyButton = styled.button<{ copying?: boolean }>`
 
   &:disabled {
     opacity: 0.6;
-    cursor: not-allowed;
+    cursor: pointer;
   }
 `;
 
