@@ -1,8 +1,30 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import useSvgComponents from "../store/useSvgComponents";
 import SearchBar from "../components/SearchBar";
+
+const dropDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translate(-50%, -120%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -120%);
+  }
+`;
 
 const categoryMap: Record<string, string> = {
   "interface & ui": "user interface",
@@ -104,8 +126,7 @@ const SvgComponents = () => {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-const mobileSearchRef = useRef<HTMLDivElement>(null);
-
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -135,33 +156,31 @@ const mobileSearchRef = useRef<HTMLDivElement>(null);
   };
 
   useEffect(() => {
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      mobileSearchRef.current &&
-      !mobileSearchRef.current.contains(e.target as Node)
-    ) {
-      closeMobileSearch();
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(e.target as Node)
+      ) {
+        closeMobileSearch();
+      }
+    };
+
+    if (isMobileSearchOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
-  };
 
-  if (isMobileSearchOpen) {
-    document.addEventListener("mousedown", handleClickOutside);
-  }
-
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, [isMobileSearchOpen]);
-
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileSearchOpen]);
 
   const closeMobileSearch = () => {
-  setIsClosing(true);
-  setTimeout(() => {
-    setIsMobileSearchOpen(false);
-    setIsClosing(false);
-  }, 300);
-};
-
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsMobileSearchOpen(false);
+      setIsClosing(false);
+    }, 300);
+  };
 
   useEffect(() => {
     if (isMobileSearchOpen) {
@@ -175,13 +194,10 @@ const mobileSearchRef = useRef<HTMLDivElement>(null);
     };
   }, [isMobileSearchOpen]);
 
-
-
   return (
     <Main>
-      {isMobileSearchOpen  && (
-        <MobileSearchDropdown  ref={mobileSearchRef}
-    isClosing={isClosing}>
+      {isMobileSearchOpen && (
+        <MobileSearchDropdown ref={mobileSearchRef} isClosing={isClosing}>
           <MobileSearchTitle>
             <span className="highlight">Uncover</span>
             <span>Something</span>
@@ -725,6 +741,7 @@ const IconCard = styled.div`
     }
   }
 `;
+
 const IconInner = styled.div<{ clicked?: boolean }>`
   width: 150px;
   height: 150px;
@@ -835,7 +852,7 @@ const FilterItem = styled.button`
   white-space: nowrap;
   width: fit-content;
   height: 60px;
-  border-radius: 14px; /* keep this */
+  border-radius: 14px;
   background: linear-gradient(45deg, #2973ff 0%, #932eff 80%);
   color: white;
   cursor: pointer;
@@ -911,9 +928,8 @@ const MobileFilterButton = styled.button`
 `;
 const MobileSearchDropdown = styled.div<{ isClosing: boolean }>`
   position: fixed;
-  margin-top: 15px;
+  top: 170px;
   left: 50%;
-  transform: translateX(-50%);
   width: 90%;
   background-color: #18122a;
   border-radius: 15px;
@@ -921,32 +937,11 @@ const MobileSearchDropdown = styled.div<{ isClosing: boolean }>`
   box-sizing: border-box;
   color: white;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  animation: ${(props) => (props.isClosing ? "slideUp" : "dropDown")} 0.3s ease forwards;
+  animation: ${({ isClosing }) => (isClosing ? slideUp : dropDown)} 0.3s ease
+    forwards;
+  transform: translate(-50%, 0);
   z-index: 9999;
-
-  @keyframes dropDown {
-    from {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-    to {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-20px);
-    }
-  }
 `;
-
 
 const MobileSearchTitle = styled.h3`
   font-size: 28px;

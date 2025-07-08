@@ -125,7 +125,6 @@ const SearchIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none;
 
   @media (max-width: 767px) {
     right: 0;
