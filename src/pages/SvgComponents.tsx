@@ -129,23 +129,50 @@ const SvgComponents = () => {
   const mobileSearchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const isMobile = window.innerWidth <= 768;
+      const target = e.target as Node;
+
+      if (isMobile) {
+        // ✅ მობილურზე — მხოლოდ სერჩის დახურვა
+        if (
+          isMobileSearchOpen &&
+          mobileSearchRef.current &&
+          !mobileSearchRef.current.contains(target)
+        ) {
+          closeMobileSearch(); // მხოლოდ სერჩ
+        }
+
+        // ⛔ filterDropdown საერთოდ არ შეგვეხოს მობილურზე
+        return;
+      }
+
+      // ✅ დესკტოპზე — ორივეს დავკრათ თუ საჭიროა
       if (
+        isOpen &&
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(target)
       ) {
-        closeDropdown();
+        closeDropdown(); // filterDropdown დახურვა
+      }
+
+      if (
+        isMobileSearchOpen &&
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(target)
+      ) {
+        closeMobileSearch(); // searchDropdown დახურვა
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
+    if (isMobileSearchOpen || isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isMobileSearchOpen, isOpen]);
 
   const closeDropdown = () => {
     setIsClosing(true);
@@ -224,7 +251,7 @@ const SvgComponents = () => {
         </DesktopSearchAndFilter>
       </FilterWrapper>
 
-      {(isOpen || isClosing) && (
+      {(isOpen || (isClosing && window.innerWidth > 768)) && (
         <FilterDropdown ref={dropdownRef} isClosing={isClosing}>
           <CloseButton
             aria-label="Close filter dropdown"
