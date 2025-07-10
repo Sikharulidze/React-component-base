@@ -134,26 +134,23 @@ const SvgComponents = () => {
       const target = e.target as Node;
 
       if (isMobile) {
-        // ✅ მობილურზე — მხოლოდ სერჩის დახურვა
         if (
           isMobileSearchOpen &&
           mobileSearchRef.current &&
           !mobileSearchRef.current.contains(target)
         ) {
-          closeMobileSearch(); // მხოლოდ სერჩ
+          closeMobileSearch();
         }
 
-        // ⛔ filterDropdown საერთოდ არ შეგვეხოს მობილურზე
         return;
       }
 
-      // ✅ დესკტოპზე — ორივეს დავკრათ თუ საჭიროა
       if (
         isOpen &&
         dropdownRef.current &&
         !dropdownRef.current.contains(target)
       ) {
-        closeDropdown(); // filterDropdown დახურვა
+        closeDropdown();
       }
 
       if (
@@ -161,7 +158,7 @@ const SvgComponents = () => {
         mobileSearchRef.current &&
         !mobileSearchRef.current.contains(target)
       ) {
-        closeMobileSearch(); // searchDropdown დახურვა
+        closeMobileSearch();
       }
     };
 
