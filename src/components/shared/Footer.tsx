@@ -255,7 +255,7 @@ const StyledFooter = styled.footer`
 
       &:focus {
         border: 2px solid transparent;
-        
+
         background-image: linear-gradient(#18122a, #18122a),
           linear-gradient(45deg, #1b4ba5, #7c00ff);
         background-origin: border-box;
@@ -270,7 +270,7 @@ const StyledFooter = styled.footer`
       font-weight: bold;
       font-size: 18px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.7s ease;
       border: 2px solid transparent;
 
       background-clip: padding-box, border-box;
