@@ -4,25 +4,25 @@ import styled, { keyframes } from "styled-components";
 import useSvgComponents from "../store/useSvgComponents";
 import SearchBar from "../components/SearchBar";
 
-const dropDown = keyframes`
+const mobileDropDown = keyframes`
   from {
     opacity: 0;
-    transform: translate(100%);
+    transform: translateY(-100%);
   }
   to {
     opacity: 1;
-    transform: translate( 0);
+    transform: translateY(0);
   }
 `;
 
-const slideUp = keyframes`
+const mobileSlideUp = keyframes`
   from {
     opacity: 1;
-    transform: translate( 0);
+    transform: translateY(0);
   }
   to {
     opacity: 0;
-    transform: translate(100%);
+    transform: translateY(-100%);
   }
 `;
 
@@ -950,10 +950,10 @@ const MobileFilterButton = styled.button`
     }
   }
 `;
+
 const MobileSearchDropdown = styled.div<{ isClosing: boolean }>`
   position: fixed;
   top: 170px;
-  left: 50%;
   width: 90%;
   background-color: #18122a;
   border-radius: 15px;
@@ -961,8 +961,8 @@ const MobileSearchDropdown = styled.div<{ isClosing: boolean }>`
   box-sizing: border-box;
   color: white;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  animation: ${({ isClosing }) => (isClosing ? slideUp : dropDown)} 0.3s ease
-    forwards;
+  animation: ${({ isClosing }) => (isClosing ? mobileSlideUp : mobileDropDown)}
+    0.3s ease forwards;
   transform: translate(-50%, 0);
   z-index: 9999;
 `;
