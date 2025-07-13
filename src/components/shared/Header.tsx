@@ -8,7 +8,7 @@ const Header = () => {
   const isHomePage = location.pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClick = () => setIsOpen(!isOpen);
+  
 
   useEffect(() => {
     if (isOpen) {
