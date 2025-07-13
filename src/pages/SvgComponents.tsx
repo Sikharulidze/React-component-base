@@ -7,22 +7,22 @@ import SearchBar from "../components/SearchBar";
 const dropDown = keyframes`
   from {
     opacity: 0;
-    transform: translate(-50%, -120%);
+    transform: translate(100%);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate( 0);
   }
 `;
 
 const slideUp = keyframes`
   from {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate( 0);
   }
   to {
     opacity: 0;
-    transform: translate(-50%, -120%);
+    transform: translate(100%);
   }
 `;
 
